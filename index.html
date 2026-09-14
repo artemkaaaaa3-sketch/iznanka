@@ -18,6 +18,7 @@
 <meta property="og:site_name" content="Изнанка">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%231E1E21'/%3E%3Cpath d='M7 5v22M25 5v22' stroke='%23F7F7F4' stroke-width='2' stroke-dasharray='2 3'/%3E%3Cpath d='M16 9v14' stroke='%23F7F7F4' stroke-width='4'/%3E%3C/svg%3E">
+<link rel="preload" as="image" href="img/hero.webp" fetchpriority="high">
 <script>
 (function (h) {
   h.classList.add('js');
@@ -30,6 +31,10 @@
 <style>
 @font-face{font-family:"Science Gothic";src:url("fonts/science-gothic.woff2") format("woff2");font-weight:350 650;font-stretch:55% 175%;font-style:normal;font-display:swap}
 @font-face{font-family:"Ysabeau Office";src:url("fonts/ysabeau-office.woff2") format("woff2");font-weight:400 700;font-style:normal;font-display:swap}
+/* запасные шрифты подогнаны под ширину веб-шрифтов (замер 14.09.2026: Ysabeau Office уже Arial на 10 %, жирный — на 15 %):
+   пока грузится шрифт, лид и кнопки первого экрана не уходят на лишние строки и кадр с видео не прыгает (было CLS 0,144) */
+@font-face{font-family:"Ysabeau Fallback";src:local("Arial"),local("ArialMT");font-weight:400;size-adjust:90.1%}
+@font-face{font-family:"Ysabeau Fallback";src:local("Arial Bold"),local("Arial-BoldMT");font-weight:600 700;size-adjust:84.5%}
 
 :root{
   --flannel:#E4E4E0;
@@ -40,7 +45,7 @@
   --lining-ink:#DDE1FF;
   --wool-ink:#B9B9BE;
   --display:"Science Gothic","Arial Narrow",Arial,sans-serif;
-  --text:"Ysabeau Office","Segoe UI",system-ui,sans-serif;
+  --text:"Ysabeau Office","Ysabeau Fallback",system-ui,sans-serif;
   --wrap:1240px;
   --pad:clamp(20px,4vw,40px);
   --sec:clamp(84px,10vw,136px);
@@ -109,14 +114,14 @@ p{text-wrap:pretty}
 .nav a:hover{background-size:100% 1.5px}
 .burger{display:none}
 
-/* логотип — тканый ярлык; при наведении видна его изнанка с зеркальным текстом */
+/* логотип — тканый ярлык; при наведении видна его изнанка: кобальтовый подклад с зеркальным текстом */
 .logo{display:inline-grid;align-items:center;min-height:44px;perspective:600px;text-decoration:none}
 .logo__face,.logo__back{grid-area:1/1;display:block;padding:10px 18px 9px;border-radius:var(--r);font-family:var(--display);font-weight:600;font-size:13px;line-height:1;font-stretch:125%;letter-spacing:.26em;text-transform:uppercase;-webkit-backface-visibility:hidden;backface-visibility:hidden;transition:transform .7s cubic-bezier(.3,.7,.2,1);background-repeat:no-repeat;background-size:1px calc(100% - 8px),1px calc(100% - 8px);background-position:6px 4px,calc(100% - 6px) 4px}
 .logo__face{background-color:var(--wool);color:var(--chalk);background-image:repeating-linear-gradient(180deg,var(--chalk) 0 2px,transparent 2px 5px),repeating-linear-gradient(180deg,var(--chalk) 0 2px,transparent 2px 5px)}
-.logo__back{background-color:var(--chalk);color:var(--wool);transform:rotateY(180deg);background-image:repeating-linear-gradient(180deg,var(--wool) 0 2px,transparent 2px 5px),repeating-linear-gradient(180deg,var(--wool) 0 2px,transparent 2px 5px)}
+.logo__back{background-color:var(--lining);color:var(--chalk);transform:rotateY(180deg);background-image:repeating-linear-gradient(180deg,var(--chalk) 0 2px,transparent 2px 5px),repeating-linear-gradient(180deg,var(--chalk) 0 2px,transparent 2px 5px)}
 .logo__back span{display:inline-block;transform:scaleX(-1)}
 .logo--light .logo__face{background-color:var(--chalk);color:var(--wool);background-image:repeating-linear-gradient(180deg,var(--wool) 0 2px,transparent 2px 5px),repeating-linear-gradient(180deg,var(--wool) 0 2px,transparent 2px 5px)}
-.logo--light .logo__back{background-color:var(--wool);color:var(--chalk);background-image:repeating-linear-gradient(180deg,var(--chalk) 0 2px,transparent 2px 5px),repeating-linear-gradient(180deg,var(--chalk) 0 2px,transparent 2px 5px)}
+.logo--light .logo__back{background-color:var(--lining);color:var(--chalk);background-image:repeating-linear-gradient(180deg,var(--chalk) 0 2px,transparent 2px 5px),repeating-linear-gradient(180deg,var(--chalk) 0 2px,transparent 2px 5px)}
 @media (hover:hover){.logo:hover .logo__face{transform:rotateY(-180deg)}.logo:hover .logo__back{transform:rotateY(0deg)}}
 
 /* ── первый экран ────────────────────────────────── */
@@ -124,7 +129,7 @@ p{text-wrap:pretty}
 .hero__grid{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:clamp(28px,5vw,80px);align-items:end}
 .hero__title{font-family:var(--display);font-weight:400;font-size:clamp(52px,8.6vw,128px);line-height:.9;font-stretch:62%;font-variation-settings:"CTRS" 80;letter-spacing:-.01em}
 .ln{display:block;overflow:hidden;padding-bottom:.12em;margin-bottom:-.12em}
-.ln>span{display:block}
+.ln>span{display:block;white-space:nowrap}
 .hero__lead{margin-top:clamp(22px,2.6vw,36px);max-width:28em}
 .hero__acts{display:flex;flex-wrap:wrap;align-items:center;gap:12px 28px;margin-top:30px}
 .hero__media{position:relative}
@@ -138,7 +143,7 @@ p{text-wrap:pretty}
 .care__foot{margin-top:6px;padding-top:9px;border-top:1px solid rgba(30,30,33,.16);color:var(--thread)}
 .anim .hero__title .ln>span{transform:translateY(105%)}
 .anim .hero__lead,.anim .hero__acts,.anim .care{opacity:0}
-.anim .frame{clip-path:inset(100% 0 0 0)}
+@media (min-width:900px){.anim .frame{clip-path:inset(100% 0 0 0)}}
 
 /* кнопка паузы у видео */
 .vbtn{position:absolute;top:12px;right:12px;z-index:2;display:none;align-items:center;gap:9px;min-height:44px;padding:0 16px;border:0;border-radius:var(--r);font-weight:600;font-size:var(--t-text);line-height:1;background:rgba(30,30,33,.74);color:var(--chalk);cursor:pointer}
@@ -170,7 +175,7 @@ p{text-wrap:pretty}
 /* ── ярлыки ──────────────────────────────────────── */
 .tags{position:relative;padding:var(--sec) 0;background:var(--lining);color:var(--chalk);overflow:hidden;overflow:clip}
 .tags .head .lead{color:var(--lining-ink)}
-.rack{display:grid;grid-auto-flow:column;grid-auto-columns:clamp(236px,88%,380px);column-gap:14px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;margin:0 calc(var(--pad) * -1);padding:0 var(--pad) 8px;scroll-padding-inline:var(--pad);scrollbar-width:none}
+.rack{display:grid;grid-auto-flow:column;grid-auto-columns:clamp(236px,80%,380px);column-gap:14px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;margin:0 calc(var(--pad) * -1);padding:0 var(--pad) 8px;scroll-padding-inline:var(--pad);scrollbar-width:none}
 .rack::-webkit-scrollbar{display:none}
 .slot{position:relative;display:grid;min-height:330px;padding:0 10px}
 .slot{scroll-snap-align:start}
@@ -192,7 +197,7 @@ p{text-wrap:pretty}
 .ans{align-self:start;margin-top:26px;padding:20px 8px 0;border-top:1px dashed rgba(247,247,244,.5)}
 .ans:focus{outline:none}
 .ans:focus-visible{outline:3px solid var(--chalk);outline-offset:6px}
-.ans__k{display:block;margin-bottom:10px;color:var(--lining-ink)}
+.ans__q{display:block;margin-bottom:12px;font-family:var(--display);font-weight:400;font-size:var(--t-sub);line-height:1.02;font-stretch:62%;font-variation-settings:"CTRS" 80;color:var(--lining-ink);text-decoration-thickness:2px;text-wrap:balance}
 .ans__t{font-size:var(--t-text);line-height:var(--lh-text)}
 .tags__foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 24px;margin-top:40px}
 .tags__done{display:flex;flex-wrap:wrap;align-items:center;gap:16px 28px;margin-top:28px}
@@ -291,7 +296,9 @@ p{text-wrap:pretty}
 
 /* ── подвал ──────────────────────────────────────── */
 .foot{background:var(--wool);color:var(--wool-ink)}
-.foot__in{display:grid;grid-template-columns:1fr;gap:18px;padding-top:32px;padding-bottom:40px;border-top:1px solid rgba(247,247,244,.14)}
+.foot__in{position:relative;display:grid;grid-template-columns:1fr;gap:18px;padding-top:32px;padding-bottom:40px}
+/* линия по ширине контента, а не обёртки с полями */
+.foot__in::before{content:"";position:absolute;left:var(--pad);right:var(--pad);top:0;height:1px;background:rgba(247,247,244,.14)}
 .foot a{color:var(--chalk)}
 .foot__in>p{max-width:34em}
 .foot__links{display:flex;flex-wrap:wrap;gap:6px 22px}
@@ -325,6 +332,59 @@ body.has-host-badge .menu{padding-bottom:104px}
 .menu .btn{width:100%;margin-top:28px}
 .menu__tel{display:inline-flex;align-items:center;min-height:44px;margin-top:14px;font-weight:600}
 
+/* ── подбор услуги и все цены ─────────────────────── */
+.pick{display:none}
+.js .pick{display:grid;grid-template-columns:1fr;gap:40px;margin-top:clamp(56px,7vw,96px);padding:clamp(30px,4vw,56px) clamp(20px,4vw,56px);border-radius:var(--r);background-color:var(--chalk);background-image:var(--stitch),var(--stitch);background-size:calc(100% - 28px) 1px,calc(100% - 28px) 1px;background-position:14px 11px,14px calc(100% - 11px);background-repeat:no-repeat}
+.pick__lead{margin-top:12px;max-width:34em;color:var(--thread)}
+.pick__step{margin-top:28px}
+.pick__step legend{margin-bottom:14px;color:var(--lining)}
+.pick__opts{display:flex;flex-wrap:wrap;gap:10px}
+.pick__opt{display:inline-flex;align-items:center;min-height:48px;padding:10px 18px;border:0;border-radius:var(--r);background:transparent;box-shadow:inset 0 0 0 1.5px rgba(30,30,33,.3);color:var(--wool);font-family:var(--text);font-weight:600;font-size:var(--t-text);line-height:1.25;text-align:left;cursor:pointer;transition:background-color .2s ease,color .2s ease,box-shadow .2s ease}
+.pick__opt:hover{background:var(--wool);color:var(--chalk);box-shadow:none}
+.pick__back{margin-top:12px}
+.pick__note{margin-top:28px;max-width:34em;color:var(--thread)}
+@media (max-width:767px){.pick__opt{width:100%}}
+.pick__res{position:relative;width:min(100%,380px);margin-top:8px;padding-top:58px}
+.pick__res:focus{outline:none}
+.pick__string{position:absolute;left:50%;top:0;width:2px;height:72px;margin-left:-1px;background:var(--wool);transform-origin:50% 0}
+.pick__card{position:relative;display:grid;gap:12px;padding:54px 24px 24px;border-radius:var(--r-tag);background:var(--lining);color:var(--chalk);transform:rotate(-2deg);transform-origin:50% 0}
+.pick__card :focus-visible{outline-color:var(--chalk)}
+.pick__hole{position:absolute;left:50%;top:18px;width:16px;height:16px;margin-left:-8px;border-radius:50%;background:var(--chalk);box-shadow:inset 0 0 0 2px rgba(30,30,33,.25)}
+.pick__k{color:var(--lining-ink)}
+.pick__card .svc__labels{margin:2px 0 0}
+.pick__why{color:var(--lining-ink)}
+.pick__acts{display:flex;flex-wrap:wrap;align-items:center;gap:8px 22px;margin-top:6px}
+.pick__acts .btn:hover{background:var(--wool);color:var(--chalk)}
+.pick__list-title{margin-bottom:10px;color:var(--lining)}
+.pick__prices div{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:11px 0;border-bottom:1px dashed rgba(30,30,33,.22);transition:color .3s ease}
+.pick__prices dd{flex:none;font-weight:700;white-space:nowrap}
+.pick__prices div.is-on{color:var(--lining)}
+.pick__prices div.is-on dt::before{content:"";display:inline-block;width:9px;height:9px;margin-right:10px;border-radius:50%;background:var(--lining);vertical-align:.08em}
+@media (min-width:1024px){
+  .js .pick{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);column-gap:clamp(48px,6vw,96px);align-items:stretch}
+  /* левая колонка тянется до низа прайса, заметка об оплате встаёт напротив последней строки */
+  .pick__main{display:flex;flex-direction:column}
+  .pick__note{margin-top:auto;padding-top:28px}
+}
+
+/* ── нитка над разбором: строчка пришивается при прокрутке, по ней едут три стопки ── */
+.thread{height:96px;margin-bottom:clamp(36px,5vw,64px);overflow:hidden}
+.thread svg{display:block;width:100%;height:96px}
+.thread__line{fill:none;stroke:var(--thread);stroke-width:1.5;stroke-dasharray:7 5}
+.thread__text{fill:var(--wool);letter-spacing:.24em}
+.proc{padding-top:clamp(28px,4vw,52px)}
+
+/* ── нижняя панель записи на телефоне ────────────── */
+.dock{display:none}
+@media (max-width:767px){
+  .js .dock{position:fixed;left:0;right:0;bottom:0;z-index:44;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px var(--pad) calc(10px + env(safe-area-inset-bottom));background:var(--wool);color:var(--chalk);box-shadow:0 -10px 28px rgba(30,30,33,.18);transform:translateY(110%);visibility:hidden;transition:transform .3s ease,visibility 0s linear .3s}
+  .js .dock.is-on{transform:none;visibility:visible;transition:transform .3s ease}
+  .dock__t{font-size:var(--t-text);line-height:1.3;color:var(--wool-ink)}
+  .dock .btn{flex:none}
+  .dock .btn:hover{background:var(--chalk);color:var(--wool)}
+  .dock :focus-visible{outline-color:var(--chalk)}
+  body.dock-on .cookie{bottom:calc(76px + env(safe-area-inset-bottom))}
+}
 /* ── ширины ──────────────────────────────────────── */
 @media (min-width:768px){
   .menu{top:76px}
@@ -354,6 +414,8 @@ body.has-host-badge .menu{padding-bottom:104px}
   .book__grid{grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);column-gap:clamp(48px,6vw,96px);row-gap:64px}
   .terms{grid-column:1/-1;grid-row:2;padding-top:32px;border-top:1px solid rgba(247,247,244,.14)}
   .terms ul{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px 40px}
+  /* пять пунктов в три колонки: последний на две клетки — пустой клетки нет, колонки рядов совпадают */
+  .terms li:last-child{grid-column:span 2}
   .terms li{padding-left:0}
   .terms li::before{display:none}
   .terms li+li{margin-top:0}
@@ -439,6 +501,9 @@ body.has-host-badge .menu{padding-bottom:104px}
   .tag__card{min-height:182px;padding:36px 12px 14px;gap:12px}
   .ans{margin-top:22px;padding:16px 0 0}
   .form .btn{width:100%}
+  /* повёрнутые бирки уже на 24 px: иначе угол выходит за линию контента */
+  .cert{width:min(100% - 24px,306px)}
+  .pick__res{width:calc(100% - 24px)}
 }
 @media (max-width:479px){
   .top__cta{display:none}
@@ -461,9 +526,9 @@ body.has-host-badge .menu{padding-bottom:104px}
 
 <header class="top" id="top">
   <div class="wrap top__in">
-    <a class="logo" href="#main" aria-label="Изнанка — к началу страницы">
-      <span class="logo__face" aria-hidden="true">Изнанка</span>
-      <span class="logo__back" aria-hidden="true"><span>Изнанка</span></span>
+    <a class="logo" href="#main">
+      <span class="logo__face">Изнанка</span>
+      <span class="logo__back" aria-hidden="true"><span>Изнанка</span></span><span class="sr">&nbsp;— к&nbsp;началу страницы</span>
     </a>
     <div class="top__right">
       <nav class="nav" aria-label="Разделы">
@@ -510,7 +575,7 @@ body.has-host-badge .menu{padding-bottom:104px}
       </div>
       <figure class="hero__media">
         <div class="frame">
-          <video muted loop playsinline preload="none" poster="img/hero.jpg" data-src="video/hero-720.mp4" data-src-sm="video/hero-360.mp4" aria-label="Стилист поправляет серьгу и красный пиджак модели у стойки с одеждой"></video>
+          <video muted loop playsinline preload="none" poster="img/hero.webp" data-src="video/hero-720.mp4" data-src-sm="video/hero-360.mp4" aria-label="Стилист поправляет серьгу и красный пиджак модели у стойки с одеждой"></video>
           <button class="vbtn is-paused" type="button"><span class="vbtn__i" aria-hidden="true"></span><span class="vbtn__t">Смотреть</span><span class="sr"> видео о&nbsp;студии</span></button>
         </div>
         <figcaption class="care">
@@ -537,7 +602,7 @@ body.has-host-badge .menu{padding-bottom:104px}
           <li class="svc__item" data-key="razbor" data-name="Разбор гардероба" data-price="3&nbsp;часа · 7&nbsp;500&nbsp;₽">
             <div class="svc__slot">
               <div class="svc__media" id="m-razbor">
-                <video muted loop playsinline preload="none" poster="img/razbor.jpg" data-src="video/razbor.mp4" aria-label="Рука перебирает вешалки с одеждой"></video>
+                <video muted loop playsinline preload="none" poster="img/razbor.webp" data-src="video/razbor.mp4" aria-label="Рука перебирает вешалки с одеждой"></video>
                 <button class="vbtn is-paused" type="button"><span class="vbtn__i" aria-hidden="true"></span><span class="vbtn__t">Смотреть</span><span class="sr"> видео: разбор гардероба</span></button>
               </div>
             </div>
@@ -556,7 +621,7 @@ body.has-host-badge .menu{padding-bottom:104px}
           <li class="svc__item" data-key="shoping" data-name="Шопинг со стилистом" data-price="4&nbsp;часа · 8&nbsp;000&nbsp;₽">
             <div class="svc__slot">
               <div class="svc__media" id="m-shoping">
-                <video muted loop playsinline preload="none" poster="img/shoping.jpg" data-src="video/shoping.mp4" aria-label="Покупательница выбирает платье на стойке в магазине"></video>
+                <video muted loop playsinline preload="none" poster="img/shoping.webp" data-src="video/shoping.mp4" aria-label="Покупательница выбирает платье на стойке в магазине"></video>
                 <button class="vbtn is-paused" type="button"><span class="vbtn__i" aria-hidden="true"></span><span class="vbtn__t">Смотреть</span><span class="sr"> видео: шопинг со&nbsp;стилистом</span></button>
               </div>
             </div>
@@ -575,7 +640,7 @@ body.has-host-badge .menu{padding-bottom:104px}
           <li class="svc__item" data-key="kapsula" data-name="Капсула на сезон" data-price="2&nbsp;встречи · 14&nbsp;000&nbsp;₽">
             <div class="svc__slot">
               <div class="svc__media" id="m-kapsula">
-                <video muted loop playsinline preload="none" poster="img/kapsula.jpg" data-src="video/kapsula.mp4" aria-label="Стилист отпаривает красный пиджак у стойки с цветной одеждой"></video>
+                <video muted loop playsinline preload="none" poster="img/kapsula.webp" data-src="video/kapsula.mp4" aria-label="Стилист отпаривает красный пиджак у стойки с цветной одеждой"></video>
                 <button class="vbtn is-paused" type="button"><span class="vbtn__i" aria-hidden="true"></span><span class="vbtn__t">Смотреть</span><span class="sr"> видео: капсула на&nbsp;сезон</span></button>
               </div>
             </div>
@@ -594,7 +659,7 @@ body.has-host-badge .menu{padding-bottom:104px}
           <li class="svc__item" data-key="sobytie" data-name="Образ на событие" data-price="1,5&nbsp;часа · 4&nbsp;500&nbsp;₽">
             <div class="svc__slot">
               <div class="svc__media" id="m-sobytie">
-                <video muted loop playsinline preload="none" poster="img/sobytie.jpg" data-src="video/sobytie.mp4" aria-label="Стилист поправляет красный костюм модели перед съёмкой"></video>
+                <video muted loop playsinline preload="none" poster="img/sobytie.webp" data-src="video/sobytie.mp4" aria-label="Стилист поправляет красный костюм модели перед съёмкой"></video>
                 <button class="vbtn is-paused" type="button"><span class="vbtn__i" aria-hidden="true"></span><span class="vbtn__t">Смотреть</span><span class="sr"> видео: образ на&nbsp;событие</span></button>
               </div>
             </div>
@@ -613,7 +678,7 @@ body.has-host-badge .menu{padding-bottom:104px}
           <li class="svc__item" data-key="syomka" data-name="Fashion-съёмка" data-price="2&nbsp;часа · 12&nbsp;000&nbsp;₽">
             <div class="svc__slot">
               <div class="svc__media" id="m-syomka">
-                <video muted loop playsinline preload="none" poster="img/syomka.jpg" data-src="video/syomka.mp4" aria-label="Фотограф снимает модель в красном костюме в студии со светом"></video>
+                <video muted loop playsinline preload="none" poster="img/syomka.webp" data-src="video/syomka.mp4" aria-label="Фотограф снимает модель в красном костюме в студии со светом"></video>
                 <button class="vbtn is-paused" type="button"><span class="vbtn__i" aria-hidden="true"></span><span class="vbtn__t">Смотреть</span><span class="sr"> видео: fashion-съёмка</span></button>
               </div>
             </div>
@@ -637,6 +702,67 @@ body.has-host-badge .menu{padding-bottom:104px}
           </div>
         </div>
       </div>
+      <div class="pick" id="podbor">
+        <div class="pick__main">
+          <h3 class="h3">Не&nbsp;знаете, с&nbsp;чего начать?</h3>
+          <p class="pick__lead">Ответьте на&nbsp;пару вопросов&nbsp;— подскажем, какая услуга подойдёт и&nbsp;сколько она стоит.</p>
+          <fieldset class="pick__step" data-step="start">
+            <legend class="label">Что хотите решить</legend>
+            <div class="pick__opts">
+              <button class="pick__opt" type="button" data-next="shkaf">Шкаф полный, а&nbsp;надеть нечего</button>
+              <button class="pick__opt" type="button" data-next="kupit">Купить новое и&nbsp;не&nbsp;ошибиться</button>
+              <button class="pick__opt" type="button" data-res="sobytie">Собраться на&nbsp;важный день</button>
+              <button class="pick__opt" type="button" data-res="syomka">Сделать красивые фото</button>
+              <button class="pick__opt" type="button" data-res="gift">Сделать подарок</button>
+            </div>
+          </fieldset>
+          <fieldset class="pick__step" data-step="shkaf" hidden>
+            <legend class="label">Недостающее докупите</legend>
+            <div class="pick__opts">
+              <button class="pick__opt" type="button" data-res="razbor">Сама, по&nbsp;шопинг-листу</button>
+              <button class="pick__opt" type="button" data-res="kapsula">Вместе со&nbsp;стилистом</button>
+            </div>
+            <button class="link pick__back" type="button" data-next="start">Назад</button>
+          </fieldset>
+          <fieldset class="pick__step" data-step="kupit" hidden>
+            <legend class="label">Где удобнее покупать</legend>
+            <div class="pick__opts">
+              <button class="pick__opt" type="button" data-res="shoping">В&nbsp;магазинах Пскова</button>
+              <button class="pick__opt" type="button" data-res="market">Онлайн: в&nbsp;Пскове нет моего размера</button>
+              <button class="pick__opt" type="button" data-res="spb">Съездить в&nbsp;Петербург за&nbsp;марками</button>
+            </div>
+            <button class="link pick__back" type="button" data-next="start">Назад</button>
+          </fieldset>
+          <div class="pick__res" id="pickRes" tabindex="-1" hidden>
+            <span class="pick__string" aria-hidden="true"></span>
+            <div class="pick__card">
+              <span class="pick__hole" aria-hidden="true"></span>
+              <span class="label pick__k">Вам подойдёт</span>
+              <p class="h3 pick__name">Разбор гардероба</p>
+              <ul class="svc__labels" aria-label="Длительность и цена"><li class="label lbl pick__time">3&nbsp;часа</li><li class="label lbl lbl--dark pick__price">7&nbsp;500&nbsp;₽</li></ul>
+              <p class="pick__why">Разберёте шкаф со&nbsp;стилистом, соберёте образы из&nbsp;своих вещей и&nbsp;получите шопинг-лист.</p>
+              <div class="pick__acts">
+                <a class="btn btn--chalk pick__go" href="#zapis" data-service="razbor">Записаться</a>
+                <button class="link link--chalk" type="button" data-next="start">Подобрать заново</button>
+              </div>
+            </div>
+          </div>
+          <p class="pick__note">Оплата после встречи: картой, переводом или&nbsp;наличными. Предоплата&nbsp;— только за&nbsp;съёмку.</p>
+        </div>
+        <div class="pick__list">
+          <h3 class="label pick__list-title">Все цены</h3>
+          <dl class="pick__prices">
+            <div data-key="razbor" data-time="3&nbsp;часа" data-why="Разберёте шкаф со&nbsp;стилистом, соберёте образы из&nbsp;своих вещей и&nbsp;получите шопинг-лист."><dt>Разбор гардероба</dt><dd>7&nbsp;500&nbsp;₽</dd></div>
+            <div data-key="shoping" data-time="4&nbsp;часа" data-why="Стилист заранее отложит вещи вашего размера, вам останется примерить и&nbsp;решить."><dt>Шопинг со&nbsp;стилистом</dt><dd>8&nbsp;000&nbsp;₽</dd></div>
+            <div data-key="kapsula" data-time="2&nbsp;встречи" data-why="Разбор и&nbsp;шопинг с&nbsp;одним стилистом. На&nbsp;1&nbsp;500&nbsp;₽ дешевле, чем по&nbsp;отдельности."><dt>Капсула на&nbsp;сезон</dt><dd>14&nbsp;000&nbsp;₽</dd></div>
+            <div data-key="sobytie" data-time="1,5&nbsp;часа" data-why="Соберём образ от&nbsp;платья до&nbsp;серёг и&nbsp;запасной вариант на&nbsp;случай дождя."><dt>Образ на&nbsp;событие</dt><dd>4&nbsp;500&nbsp;₽</dd></div>
+            <div data-key="syomka" data-time="2&nbsp;часа" data-why="Одеваем, делаем макияж и&nbsp;ставим свет. Через пять дней&nbsp;— 20 кадров в&nbsp;ретуши."><dt>Fashion-съёмка</dt><dd>12&nbsp;000&nbsp;₽</dd></div>
+            <div data-key="market" data-time="20 вещей" data-why="Двадцать ссылок на&nbsp;Wildberries, Ozon и&nbsp;Lamoda по&nbsp;вашим меркам."><dt>Подбор на&nbsp;маркетплейсах</dt><dd>3&nbsp;000&nbsp;₽</dd></div>
+            <div data-key="spb" data-time="1&nbsp;день" data-why="Туда и&nbsp;обратно на&nbsp;«Ласточке», около десяти часов на&nbsp;магазины. Билеты&nbsp;— отдельно."><dt>День в&nbsp;Петербурге</dt><dd>15&nbsp;000&nbsp;₽</dd></div>
+            <div data-key="gift" data-time="полгода" data-why="На&nbsp;любую услугу или&nbsp;сумму. Пришлём файлом или&nbsp;отдадим в&nbsp;конверте с&nbsp;тканым ярлыком."><dt>Сертификат</dt><dd>от&nbsp;3&nbsp;000&nbsp;₽</dd></div>
+          </dl>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -644,7 +770,7 @@ body.has-host-badge .menu{padding-bottom:104px}
     <div class="wrap">
       <div class="head">
         <h2 class="h2" id="tags-title">Снимаем ярлыки</h2>
-        <p class="lead">У&nbsp;32&nbsp;% женщин в&nbsp;шкафу больше 20 вещей, которые они&nbsp;не&nbsp;носят (<a href="https://lady.mail.ru/article/595502-skolko-deneg-lezhit-v-shkafu-kak-rossiyanki-na-samom-dele-prodayut-i-pokupayut-na-resejle/" target="_blank" rel="noopener">опрос Леди Mail, август 2026</a>). Расстаться с&nbsp;ними мешают мысли «жалко» и&nbsp;«вдруг пригодится». Записаться к&nbsp;стилисту не&nbsp;дают похожие мысли&nbsp;— вот девять из&nbsp;них. Срежьте бирку, и&nbsp;под&nbsp;ней появится&nbsp;ответ.</p>
+        <p class="lead">У&nbsp;32&nbsp;% женщин в&nbsp;шкафу больше 20 вещей, которые они&nbsp;не&nbsp;носят (<a href="https://lady.mail.ru/article/595502-skolko-deneg-lezhit-v-shkafu-kak-rossiyanki-na-samom-dele-prodayut-i-pokupayut-na-resejle/" target="_blank" rel="noopener">опрос Леди Mail, август 2026</a>). Расстаться с&nbsp;ними мешают «жалко» и&nbsp;«вдруг пригодится», записаться к&nbsp;стилисту&nbsp;— девять похожих мыслей. Срежьте бирку, и&nbsp;под&nbsp;ней появится&nbsp;ответ.</p>
       </div>
       <ul class="rack">
         <li class="slot">
@@ -652,63 +778,63 @@ body.has-host-badge .menu{padding-bottom:104px}
             <span class="tag__string" style="--len:40px" aria-hidden="true"></span>
             <span class="tag__card" style="--rot:-3deg"><span class="tag__hole" aria-hidden="true"></span><span class="tag__text">Надену, когда&nbsp;похудею</span><span class="tag__cut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.12 8.12 12 12M20 4 8.12 15.88M14.8 14.8 20 20"/></svg>Срезать</span></span>
           </button>
-          <div class="ans" id="a1" tabindex="-1" hidden><span class="label ans__k">Ответ стилиста</span><p class="ans__t">Носить нужно сейчас. Подберём посадку на&nbsp;сегодняшнюю фигуру, а&nbsp;вещи «на&nbsp;потом» уберём&nbsp;отдельно.</p></div>
+          <div class="ans" id="a1" tabindex="-1" hidden><s class="ans__q">Надену, когда&nbsp;похудею</s><p class="ans__t">Носить нужно сейчас. Подберём посадку на&nbsp;сегодняшнюю фигуру, а&nbsp;вещи «на&nbsp;потом» уберём&nbsp;отдельно.</p></div>
         </li>
         <li class="slot">
           <button class="tag" type="button" aria-expanded="false" aria-controls="a2">
             <span class="tag__string" style="--len:64px" aria-hidden="true"></span>
             <span class="tag__card" style="--rot:2deg"><span class="tag__hole" aria-hidden="true"></span><span class="tag__text">Стилист&nbsp;— это&nbsp;для&nbsp;богатых</span><span class="tag__cut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.12 8.12 12 12M20 4 8.12 15.88M14.8 14.8 20 20"/></svg>Срезать</span></span>
           </button>
-          <div class="ans" id="a2" tabindex="-1" hidden><span class="label ans__k">Ответ стилиста</span><p class="ans__t">Разбор стоит 7&nbsp;500&nbsp;₽. Одно неудачное пальто обходится&nbsp;дороже.</p></div>
+          <div class="ans" id="a2" tabindex="-1" hidden><s class="ans__q">Стилист&nbsp;— это&nbsp;для&nbsp;богатых</s><p class="ans__t">Разбор стоит 7&nbsp;500&nbsp;₽, подбор на&nbsp;маркетплейсах&nbsp;— 3&nbsp;000&nbsp;₽. Одно неудачное пальто обходится&nbsp;дороже.</p></div>
         </li>
         <li class="slot">
           <button class="tag" type="button" aria-expanded="false" aria-controls="a3">
             <span class="tag__string" style="--len:28px" aria-hidden="true"></span>
             <span class="tag__card" style="--rot:-1deg"><span class="tag__hole" aria-hidden="true"></span><span class="tag__text">Заставят выкинуть любимое</span><span class="tag__cut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.12 8.12 12 12M20 4 8.12 15.88M14.8 14.8 20 20"/></svg>Срезать</span></span>
           </button>
-          <div class="ans" id="a3" tabindex="-1" hidden><span class="label ans__k">Ответ стилиста</span><p class="ans__t">Не&nbsp;заставим. Любимое остаётся, а&nbsp;мы&nbsp;объясняем, с&nbsp;чем&nbsp;его&nbsp;носить.</p></div>
+          <div class="ans" id="a3" tabindex="-1" hidden><s class="ans__q">Заставят выкинуть любимое</s><p class="ans__t">Не&nbsp;заставим. Любимое остаётся, а&nbsp;мы&nbsp;объясняем, с&nbsp;чем&nbsp;его&nbsp;носить.</p></div>
         </li>
         <li class="slot">
           <button class="tag" type="button" aria-expanded="false" aria-controls="a4">
             <span class="tag__string" style="--len:52px" aria-hidden="true"></span>
             <span class="tag__card" style="--rot:4deg"><span class="tag__hole" aria-hidden="true"></span><span class="tag__text">С&nbsp;моей фигурой&nbsp;— только чёрное</span><span class="tag__cut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.12 8.12 12 12M20 4 8.12 15.88M14.8 14.8 20 20"/></svg>Срезать</span></span>
           </button>
-          <div class="ans" id="a4" tabindex="-1" hidden><span class="label ans__k">Ответ стилиста</span><p class="ans__t">Размер не&nbsp;выбирает цвет. Подберём оттенки к&nbsp;лицу и&nbsp;крой, который держит&nbsp;силуэт.</p></div>
+          <div class="ans" id="a4" tabindex="-1" hidden><s class="ans__q">С&nbsp;моей фигурой&nbsp;— только чёрное</s><p class="ans__t">Размер не&nbsp;выбирает цвет. Подберём оттенки к&nbsp;лицу и&nbsp;крой, который держит&nbsp;силуэт.</p></div>
         </li>
         <li class="slot">
           <button class="tag" type="button" aria-expanded="false" aria-controls="a5">
             <span class="tag__string" style="--len:34px" aria-hidden="true"></span>
             <span class="tag__card" style="--rot:2deg"><span class="tag__hole" aria-hidden="true"></span><span class="tag__text">Мне уже&nbsp;поздно</span><span class="tag__cut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.12 8.12 12 12M20 4 8.12 15.88M14.8 14.8 20 20"/></svg>Срезать</span></span>
           </button>
-          <div class="ans" id="a5" tabindex="-1" hidden><span class="label ans__k">Ответ стилиста</span><p class="ans__t">Возраст&nbsp;— не&nbsp;дресс-код. С&nbsp;годами меняются ткани и&nbsp;крой, а&nbsp;яркое по-прежнему можно&nbsp;носить.</p></div>
+          <div class="ans" id="a5" tabindex="-1" hidden><s class="ans__q">Мне уже&nbsp;поздно</s><p class="ans__t">Возраст&nbsp;— не&nbsp;дресс-код. С&nbsp;годами меняются ткани и&nbsp;крой, а&nbsp;яркое по-прежнему можно&nbsp;носить.</p></div>
         </li>
         <li class="slot">
           <button class="tag" type="button" aria-expanded="false" aria-controls="a6">
             <span class="tag__string" style="--len:58px" aria-hidden="true"></span>
             <span class="tag__card" style="--rot:-4deg"><span class="tag__hole" aria-hidden="true"></span><span class="tag__text">В&nbsp;Пскове нечего купить</span><span class="tag__cut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.12 8.12 12 12M20 4 8.12 15.88M14.8 14.8 20 20"/></svg>Срезать</span></span>
           </button>
-          <div class="ans" id="a6" tabindex="-1" hidden><span class="label ans__k">Ответ стилиста</span><p class="ans__t">Есть, если&nbsp;знать, где&nbsp;искать. Не&nbsp;хватит&nbsp;— соберём ссылки на&nbsp;маркетплейсах или&nbsp;съездим&nbsp;в&nbsp;Петербург.</p></div>
+          <div class="ans" id="a6" tabindex="-1" hidden><s class="ans__q">В&nbsp;Пскове нечего купить</s><p class="ans__t">Есть, если&nbsp;знать, где&nbsp;искать. Не&nbsp;хватит&nbsp;— соберём ссылки на&nbsp;маркетплейсах или&nbsp;съездим&nbsp;в&nbsp;Петербург.</p></div>
         </li>
         <li class="slot">
           <button class="tag" type="button" aria-expanded="false" aria-controls="a7">
             <span class="tag__string" style="--len:30px" aria-hidden="true"></span>
             <span class="tag__card" style="--rot:3deg"><span class="tag__hole" aria-hidden="true"></span><span class="tag__text">Нарядят не&nbsp;в&nbsp;моём стиле</span><span class="tag__cut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.12 8.12 12 12M20 4 8.12 15.88M14.8 14.8 20 20"/></svg>Срезать</span></span>
           </button>
-          <div class="ans" id="a7" tabindex="-1" hidden><span class="label ans__k">Ответ стилиста</span><p class="ans__t">Сначала спрашиваем про&nbsp;работу, детей и&nbsp;каблуки. Образ, в&nbsp;котором вам неудобно,&nbsp;не&nbsp;предложим.</p></div>
+          <div class="ans" id="a7" tabindex="-1" hidden><s class="ans__q">Нарядят не&nbsp;в&nbsp;моём стиле</s><p class="ans__t">Сначала спрашиваем про&nbsp;работу, детей и&nbsp;каблуки. Образ, в&nbsp;котором вам неудобно,&nbsp;не&nbsp;предложим.</p></div>
         </li>
         <li class="slot">
           <button class="tag" type="button" aria-expanded="false" aria-controls="a8">
             <span class="tag__string" style="--len:46px" aria-hidden="true"></span>
             <span class="tag__card" style="--rot:-2deg"><span class="tag__hole" aria-hidden="true"></span><span class="tag__text">Не&nbsp;умею позировать</span><span class="tag__cut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.12 8.12 12 12M20 4 8.12 15.88M14.8 14.8 20 20"/></svg>Срезать</span></span>
           </button>
-          <div class="ans" id="a8" tabindex="-1" hidden><span class="label ans__k">Ответ стилиста</span><p class="ans__t">И&nbsp;не&nbsp;надо. Фотограф ведёт в&nbsp;кадре: куда встать, куда деть руки,&nbsp;когда&nbsp;выдохнуть.</p></div>
+          <div class="ans" id="a8" tabindex="-1" hidden><s class="ans__q">Не&nbsp;умею позировать</s><p class="ans__t">И&nbsp;не&nbsp;надо. Фотограф ведёт в&nbsp;кадре: куда встать, куда деть руки,&nbsp;когда&nbsp;выдохнуть.</p></div>
         </li>
         <li class="slot">
           <button class="tag" type="button" aria-expanded="false" aria-controls="a9">
             <span class="tag__string" style="--len:38px" aria-hidden="true"></span>
             <span class="tag__card" style="--rot:1deg"><span class="tag__hole" aria-hidden="true"></span><span class="tag__text">Стыдно показывать свой&nbsp;шкаф</span><span class="tag__cut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.12 8.12 12 12M20 4 8.12 15.88M14.8 14.8 20 20"/></svg>Срезать</span></span>
           </button>
-          <div class="ans" id="a9" tabindex="-1" hidden><span class="label ans__k">Ответ стилиста</span><p class="ans__t">Прибираться заранее не&nbsp;нужно: разбирать проще, когда&nbsp;всё&nbsp;лежит как&nbsp;есть. Что увидит стилист, останется&nbsp;между&nbsp;вами.</p></div>
+          <div class="ans" id="a9" tabindex="-1" hidden><s class="ans__q">Стыдно показывать свой&nbsp;шкаф</s><p class="ans__t">Прибираться заранее не&nbsp;нужно: разбирать проще, когда&nbsp;всё&nbsp;лежит как&nbsp;есть. Что увидит стилист, останется&nbsp;между&nbsp;вами.</p></div>
         </li>
       </ul>
       <div class="tags__foot">
@@ -723,6 +849,18 @@ body.has-host-badge .menu{padding-bottom:104px}
   </section>
 
   <section class="proc" id="razbor" aria-labelledby="proc-title">
+    <div class="thread" aria-hidden="true">
+      <svg viewBox="0 0 1440 96" preserveAspectRatio="xMinYMid slice" focusable="false">
+        <defs>
+          <path id="threadPath" d="M0 54 Q130 14 260 54 T520 54 T780 54 T1040 54 T1300 54 T1560 54"/>
+          <clipPath id="threadClip"><rect class="thread__reveal" x="0" y="0" width="1440" height="96"/></clipPath>
+        </defs>
+        <g clip-path="url(#threadClip)">
+          <use class="thread__line" href="#threadPath"/>
+          <text class="label thread__text" dy="-12"><textPath href="#threadPath" startOffset="0">носить · подумать · отпустить · </textPath></text>
+        </g>
+      </svg>
+    </div>
     <div class="wrap">
       <div class="head">
         <h2 class="h2" id="proc-title">Как&nbsp;проходят три часа разбора</h2>
@@ -756,7 +894,7 @@ body.has-host-badge .menu{padding-bottom:104px}
         <li class="step" data-a="60">
           <span class="label step__time">60–150&nbsp;мин</span>
           <h3 class="h3">Примерка</h3>
-          <p>Из&nbsp;стопки «подумать» собираем комплекты. Удачные снимаем&nbsp;на&nbsp;фото.</p>
+          <p>Из&nbsp;стопок «носить» и&nbsp;«подумать» собираем комплекты. Удачные снимаем&nbsp;на&nbsp;фото.</p>
         </li>
         <li class="step" data-a="150">
           <span class="label step__time">150–180&nbsp;мин</span>
@@ -919,7 +1057,7 @@ body.has-host-badge .menu{padding-bottom:104px}
         <p class="err" id="e-agree" hidden>Без&nbsp;согласия заявку принять нельзя</p>
         <p class="agree__note">Как&nbsp;студия обращается с&nbsp;данными, написано в&nbsp;<a href="policy.html" target="_blank">политике обработки персональных данных</a>.</p>
         <button class="btn" type="submit">Записаться</button>
-        <p class="form__ok" id="formOk" role="status" tabindex="-1" hidden>Заявка у&nbsp;стилиста. Напишем в&nbsp;течение двух&nbsp;часов.</p>
+        <p class="form__ok" id="formOk" role="status" tabindex="-1" hidden>Заявка у&nbsp;стилиста. Напишем в&nbsp;течение двух часов, а&nbsp;после 21:00&nbsp;— утром.</p>
       </form>
     </div>
   </section>
@@ -928,9 +1066,9 @@ body.has-host-badge .menu{padding-bottom:104px}
 
 <footer class="foot">
   <div class="wrap foot__in">
-    <a class="logo logo--light" href="#main" aria-label="Изнанка — к началу страницы">
-      <span class="logo__face" aria-hidden="true">Изнанка</span>
-      <span class="logo__back" aria-hidden="true"><span>Изнанка</span></span>
+    <a class="logo logo--light" href="#main">
+      <span class="logo__face">Изнанка</span>
+      <span class="logo__back" aria-hidden="true"><span>Изнанка</span></span><span class="sr">&nbsp;— к&nbsp;началу страницы</span>
     </a>
     <p><span class="nw">Fashion-студия</span> в&nbsp;Пскове: разбор гардероба, шопинг, образ на&nbsp;событие и&nbsp;съёмка.&nbsp;©&nbsp;2026</p>
     <div class="foot__links">
@@ -939,9 +1077,14 @@ body.has-host-badge .menu{padding-bottom:104px}
       <a href="policy.html">Политика обработки данных</a>
       <button type="button" id="cookieOpen">Настройки cookie</button>
     </div>
-    <p class="foot__legal">ИП Фамилия Имя Отчество · ОГРНИП 000000000000000 · ИНН 000000000000 · г.&nbsp;Псков. Яндекс Метрика и&nbsp;cookie работают, только если&nbsp;вы&nbsp;согласились. Цены на&nbsp;сайте не&nbsp;являются публичной офертой: стоимость подтверждаем&nbsp;в&nbsp;переписке.</p>
+    <p class="foot__legal">ИП Фамилия Имя Отчество · ОГРНИП 000000000000000 · ИНН 000000000000 · г.&nbsp;Псков. Яндекс Метрика и&nbsp;cookie работают, только если&nbsp;вы&nbsp;согласились. Цены на&nbsp;сайте не&nbsp;являются публичной&nbsp;офертой.</p>
   </div>
 </footer>
+
+<div class="dock" id="dock">
+  <p class="dock__t">С&nbsp;10:00 до&nbsp;21:00 ответим за&nbsp;два часа</p>
+  <a class="btn btn--sm" href="#zapis">Записаться</a>
+</div>
 
 <div class="cookie" id="cookie" role="region" aria-label="Уведомление о cookie" hidden>
   <p>Сайт использует cookie и&nbsp;Яндекс Метрику. Подробнее&nbsp;— в&nbsp;<a href="policy.html">политике</a>.</p>
@@ -1082,7 +1225,7 @@ document.addEventListener('DOMContentLoaded', function () {
     watch(it, videoOf(k), function () { return !desk.matches; });
   });
   if (G) ScrollTrigger.create({
-    trigger: '#uslugi', start: 'top 70%', end: 'bottom 30%',
+    trigger: '.svc__grid', start: 'top 70%', end: 'bottom 30%',
     onToggle: function (self) {
       svcIn = self.isActive;
       if (!desk.matches) return;
@@ -1174,13 +1317,15 @@ document.addEventListener('DOMContentLoaded', function () {
     html.classList.remove('anim');
     G.set(lines, { yPercent: 105 });
     G.set(rest, { autoAlpha: 0, y: 14 });
-    G.set(heroFrame, { clipPath: 'inset(100% 0% 0% 0%)' });
+    var wideHero = window.matchMedia('(min-width: 900px)').matches;
+    if (wideHero) G.set(heroFrame, { clipPath: 'inset(100% 0% 0% 0%)' });
     G.set(care, { autoAlpha: 0, y: -26 });
-    G.timeline({ defaults: { ease: 'power3.out' } })
+    var intro = G.timeline({ defaults: { ease: 'power3.out' } })
       .to(lines, { yPercent: 0, duration: .95, stagger: .09 })
-      .to(heroFrame, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.15, ease: 'power4.inOut' }, .05)
       .to(rest, { autoAlpha: 1, y: 0, duration: .6, stagger: .08 }, .45)
       .to(care, { autoAlpha: 1, y: 0, duration: .8, ease: 'back.out(1.7)' }, .95);
+    /* на телефоне кадр не прячем: это самый крупный элемент первого экрана, и LCP ждал бы конца анимации */
+    if (wideHero) intro.to(heroFrame, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.15, ease: 'power4.inOut' }, .05);
   } else {
     html.classList.remove('anim');
   }
@@ -1269,6 +1414,107 @@ document.addEventListener('DOMContentLoaded', function () {
     goal('zayavka');
   });
 
+  /* ── подбор услуги: один-два вопроса, ответ — бирка с ценой, строка в прайсе подсвечивается ── */
+  var pick = document.getElementById('podbor');
+  var pSteps = pick ? [].slice.call(pick.querySelectorAll('.pick__step')) : [];
+  var pRes = document.getElementById('pickRes');
+  var pRows = pick ? [].slice.call(pick.querySelectorAll('.pick__prices > div')) : [];
+  function pickStep(key, focus) {
+    pRes.hidden = true;
+    pRows.forEach(function (r) { r.classList.remove('is-on'); });
+    pSteps.forEach(function (st) {
+      st.hidden = st.dataset.step !== key;
+      if (st.hidden) return;
+      var first = st.querySelector('.pick__opt');
+      /* фокус — после появления шага: на кнопке, скрытой autoAlpha, он падает на body */
+      if (G && !reduce.matches) G.fromTo(st, { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: .35, ease: 'power2.out', onComplete: function () { if (focus) first.focus({ preventScroll: true }); } });
+      else if (focus) first.focus({ preventScroll: true });
+    });
+    later();
+  }
+  function pickResult(key) {
+    var row = null;
+    pRows.forEach(function (r) { var on = r.dataset.key === key; r.classList.toggle('is-on', on); if (on) row = r; });
+    if (!row) return;
+    pSteps.forEach(function (st) { st.hidden = true; });
+    pRes.querySelector('.pick__name').textContent = row.querySelector('dt').textContent;
+    pRes.querySelector('.pick__time').textContent = row.dataset.time;
+    pRes.querySelector('.pick__price').textContent = row.querySelector('dd').textContent;
+    pRes.querySelector('.pick__why').textContent = row.dataset.why;
+    pRes.querySelector('.pick__go').dataset.service = key;
+    pRes.hidden = false;
+    pRes.focus({ preventScroll: true });
+    var box = pRes.getBoundingClientRect();
+    if (box.top < 90 || box.bottom > window.innerHeight) pRes.scrollIntoView({ behavior: reduce.matches ? 'auto' : 'smooth', block: 'center' });
+    if (G && !reduce.matches) {
+      G.timeline({ defaults: { ease: 'power2.out' } })
+        .fromTo(pRes.querySelector('.pick__string'), { scaleY: 0 }, { scaleY: 1, duration: .3 })
+        .fromTo(pRes.querySelector('.pick__card'), { autoAlpha: 0, y: -26, rotation: -12 }, { autoAlpha: 1, y: 0, rotation: -2, duration: .8, ease: 'back.out(1.5)' }, '<0.1');
+    }
+    goal('podbor');
+    later();
+  }
+  if (pick) pick.addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b) return;
+    if (b.dataset.next) pickStep(b.dataset.next, true);
+    else if (b.dataset.res) pickResult(b.dataset.res);
+  });
+
+  /* ── нитка: волна под ширину экрана, текст повторяется на всю длину и едет при прокрутке ── */
+  var thread = document.querySelector('.thread');
+  var tSvg = thread && thread.querySelector('svg'), tPath = document.getElementById('threadPath');
+  var tText = thread && thread.querySelector('textPath'), tClip = thread && thread.querySelector('.thread__reveal');
+  var tUnit = tText ? tText.textContent : '', tPeriod = 0, tMoving = G && !reduce.matches;
+  function threadDraw() {
+    if (!thread) return;
+    var w = Math.max(320, Math.round(thread.getBoundingClientRect().width));
+    var half = w < 768 ? 150 : 260, amp = w < 768 ? 12 : 20, mid = 54;
+    var d = 'M0 ' + mid + ' Q' + (half / 2) + ' ' + (mid - amp * 2) + ' ' + half + ' ' + mid;
+    for (var x = half * 2; x <= w + half * 2; x += half) d += ' T' + x + ' ' + mid;
+    tPath.setAttribute('d', d);
+    tSvg.setAttribute('viewBox', '0 0 ' + w + ' 96');
+    tText.textContent = tUnit;
+    tPeriod = tText.getComputedTextLength() || 240;
+    tText.textContent = new Array(Math.ceil(tPath.getTotalLength() / tPeriod) + 3).join(tUnit);
+    tClip.setAttribute('width', tMoving ? tClip.getAttribute('width') : w);
+  }
+  threadDraw();
+  if (thread && tMoving) {
+    ScrollTrigger.addEventListener('refreshInit', threadDraw);
+    var tState = { p: 0 };
+    G.to(tState, {
+      p: 1, ease: 'none',
+      scrollTrigger: { trigger: thread, start: 'top bottom', end: 'bottom top', scrub: .6 },
+      onUpdate: function () { tText.setAttribute('startOffset', (-tState.p * tPeriod).toFixed(1)); }
+    });
+    G.fromTo(tClip, { attr: { width: 0 } }, {
+      attr: { width: function () { return Math.max(320, Math.round(thread.getBoundingClientRect().width)); } },
+      ease: 'none', immediateRender: false,
+      scrollTrigger: { trigger: thread, start: 'top 92%', end: 'top 45%', scrub: .5, invalidateOnRefresh: true }
+    });
+  } else if (thread) {
+    window.addEventListener('resize', threadDraw);
+  }
+
+  /* ── нижняя панель записи на телефоне: после кнопок первого экрана и до формы;
+        уведомление о cookie встаёт над ней, при открытом меню панель прячется ── */
+  var dock = document.getElementById('dock'), dockPast = false, dockForm = false;
+  function dockSync() {
+    if (!dock) return;
+    var on = small.matches && dockPast && !dockForm && menu.hidden;
+    dock.classList.toggle('is-on', on);
+    document.body.classList.toggle('dock-on', on);
+  }
+  if (dock && G) {
+    ScrollTrigger.create({ trigger: '.hero__acts', start: 'bottom top', end: 'max', onToggle: function (st) { dockPast = st.isActive; dockSync(); } });
+    ScrollTrigger.create({ trigger: '#zapis', start: 'top bottom', end: 'max', onToggle: function (st) { dockForm = st.isActive; dockSync(); } });
+    ['cookieYes', 'cookieNo', 'cookieOpen'].forEach(function (id) { document.getElementById(id).addEventListener('click', function () { setTimeout(dockSync, 0); }); });
+    burger.addEventListener('click', function () { setTimeout(dockSync, 0); });
+    menu.addEventListener('click', function () { setTimeout(dockSync, 0); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setTimeout(dockSync, 0); });
+    onMQ(small, dockSync);
+  }
   if (G) {
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { ScrollTrigger.refresh(); });
     window.addEventListener('load', function () { ScrollTrigger.refresh(); });
