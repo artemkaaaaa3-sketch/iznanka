@@ -280,7 +280,7 @@ p{text-wrap:pretty}
 .chips legend{margin-bottom:12px}
 .chips__row{display:flex;flex-wrap:wrap;gap:10px}
 .chip{position:relative;display:inline-flex}
-.chip input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.chip input{position:absolute;top:50%;left:50%;opacity:0;width:1px;height:1px;margin:0}
 .chip span{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:var(--r);box-shadow:inset 0 0 0 1px rgba(247,247,244,.35);font-weight:600;font-size:var(--t-text);line-height:1.2;cursor:pointer;transition:background-color .2s ease,color .2s ease}
 .chip input:checked+span{background:var(--chalk);color:var(--wool);box-shadow:none}
 .chip input:focus-visible+span{outline:3px solid var(--lining-ink);outline-offset:2px}
@@ -317,6 +317,8 @@ p{text-wrap:pretty}
 .cookie__acts{display:flex;flex-wrap:wrap;gap:10px}
 /* плашка бесплатного Netlify, iframe 197×64 справа внизу: ссылки подвала, низ меню и уведомление встают выше неё */
 body.has-host-badge .foot__in{padding-bottom:104px}
+/* пока открыто уведомление о cookie, у подвала запас на его высоту: последние ссылки можно прокрутить из-под него */
+body.cover-b .foot__in{padding-bottom:calc(var(--cover-b) + 40px)}
 body.has-host-badge .menu{padding-bottom:104px}
 @media (max-width:767px){body.has-host-badge .cookie{bottom:calc(88px + env(safe-area-inset-bottom))}}
 .cookie .btn{min-height:44px;padding:6px 18px}
@@ -384,6 +386,25 @@ body.has-host-badge .menu{padding-bottom:104px}
   .dock .btn:hover{background:var(--chalk);color:var(--wool)}
   .dock :focus-visible{outline-color:var(--chalk)}
   body.dock-on .cookie{bottom:calc(76px + env(safe-area-inset-bottom))}
+}
+/* ── запись окном: форма поверх страницы, место чтения не теряется ── */
+/* scrollbar-gutter держит место полосы прокрутки: без него страница под окном съезжает вбок */
+html.book-open{overflow:hidden;scrollbar-gutter:stable}
+.bookdlg{width:min(720px,calc(100% - 32px));max-width:none;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);margin:auto;padding:0;border:0;border-radius:var(--r);background:var(--wool);color:var(--chalk);box-shadow:0 30px 80px rgba(30,30,33,.45);overflow:auto;overscroll-behavior:contain}
+.bookdlg::backdrop{background:rgba(30,30,33,.64)}
+/* крестик липкий: на телефоне форма длиннее экрана, и закрыть окно можно из любого места */
+.bookdlg__bar{position:sticky;top:0;z-index:2;display:flex;justify-content:flex-end;height:0}
+.bookdlg__x{display:inline-flex;align-items:center;justify-content:center;flex:none;width:48px;height:48px;margin:12px 12px 0 0;padding:0;border:0;border-radius:var(--r);background:var(--wool);color:var(--chalk);cursor:pointer}
+.bookdlg__x svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.bookdlg__x:hover{background:#2E2E33}
+.bookdlg__in{padding:clamp(28px,4vw,44px)}
+.bookdlg__title{margin-right:52px}
+.bookdlg__title:focus{outline:none}
+.bookdlg__lead{margin:14px 0 28px;max-width:34em;color:var(--wool-ink)}
+.bookdlg :focus-visible{outline-color:var(--chalk)}
+.bookdlg .btn:hover{background:var(--chalk);color:var(--wool)}
+@media (max-width:767px){
+  .bookdlg{width:100%;max-height:92vh;max-height:92dvh;margin:auto 0 0;border-radius:var(--r) var(--r) 0 0}
 }
 /* ── ширины ──────────────────────────────────────── */
 @media (min-width:768px){
@@ -538,7 +559,7 @@ body.has-host-badge .menu{padding-bottom:104px}
         <a href="#gde">Где&nbsp;покупать</a>
         <a href="#zapis">Контакты</a>
       </nav>
-      <a class="btn btn--sm top__cta" href="#zapis">Записаться</a>
+      <a class="btn btn--sm top__cta" href="#zapis" data-book>Записаться</a>
       <button class="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Открыть меню"><span></span><span></span></button>
     </div>
     <div class="menu" id="menu" hidden>
@@ -550,7 +571,7 @@ body.has-host-badge .menu{padding-bottom:104px}
         <a href="#komanda">Кто будет рядом</a>
         <a href="#zapis">Контакты</a>
       </nav>
-      <a class="btn" href="#zapis">Записаться</a>
+      <a class="btn" href="#zapis" data-book>Записаться</a>
       <a class="menu__tel" href="tel:+78112000000">+7 (8112) 00-00-00</a>
     </div>
   </div>
@@ -566,9 +587,9 @@ body.has-host-badge .menu{padding-bottom:104px}
           <span class="ln"><span>нечего&nbsp;—</span></span>
           <span class="ln"><span>это&nbsp;лечится</span></span>
         </h1>
-        <p class="lead hero__lead"><span class="nw">Fashion-студия</span> в&nbsp;Пскове. Разбираем гардероб, ходим с&nbsp;вами по&nbsp;магазинам и&nbsp;снимаем в&nbsp;новом&nbsp;образе.</p>
+        <p class="lead hero__lead">Мы&nbsp;— <span class="nw">fashion-студия</span> из&nbsp;Пскова: разбираем гардероб, ходим с&nbsp;вами по&nbsp;магазинам и&nbsp;снимаем в&nbsp;новом&nbsp;образе.</p>
         <div class="hero__acts">
-          <a class="btn" href="#zapis" data-service="razbor">Записаться на&nbsp;разбор</a>
+          <a class="btn" href="#zapis" data-book data-service="razbor">Записаться на&nbsp;разбор</a>
           <a class="link" href="#uslugi">Как&nbsp;это&nbsp;выглядит</a>
         </div>
         <p class="hero__price">Разбор гардероба&nbsp;— <b>7&nbsp;500&nbsp;₽</b> за&nbsp;3&nbsp;часа у&nbsp;вас дома</p>
@@ -594,7 +615,7 @@ body.has-host-badge .menu{padding-bottom:104px}
     <div class="wrap">
       <div class="head">
         <h2 class="h2" id="svc-title">За&nbsp;что можно записаться</h2>
-        <p class="lead">Цена&nbsp;— за&nbsp;работу стилиста, без&nbsp;«от». Сами вещи, прокат и&nbsp;билеты оплачиваются&nbsp;отдельно.</p>
+        <p class="lead">Цену за&nbsp;работу стилиста пишем сразу, без&nbsp;«от». Сами вещи, прокат и&nbsp;билеты оплачиваются отдельно.</p>
       </div>
       <div class="svc__grid">
         <ul class="svc__list">
@@ -613,8 +634,8 @@ body.has-host-badge .menu{padding-bottom:104px}
                 <li class="label lbl lbl--dark">7&nbsp;500&nbsp;₽</li>
               </ul>
               <p class="svc__text">Стилист приезжает к&nbsp;вам домой. Вместе разбираете шкаф, решаете, что носить дальше, и&nbsp;собираете образы из&nbsp;того, что&nbsp;уже&nbsp;есть.</p>
-              <p class="svc__result"><b>Итог:</b> <span class="nw">стайл-бук</span> в&nbsp;PDF до&nbsp;20 образов из&nbsp;ваших вещей и&nbsp;<span class="nw">шопинг-лист</span>&nbsp;— чего не&nbsp;хватает и&nbsp;сколько&nbsp;это&nbsp;стоит.</p>
-              <a class="btn btn--line" href="#zapis" data-service="razbor">Записаться<span class="sr"> на&nbsp;разбор гардероба</span></a>
+              <p class="svc__result">После разбора пришлём <span class="nw">стайл-бук</span> в&nbsp;PDF, где&nbsp;до&nbsp;20 образов собрано из&nbsp;ваших вещей. А&nbsp;в&nbsp;<span class="nw">шопинг-листе</span> запишем, чего не&nbsp;хватает и&nbsp;сколько это&nbsp;стоит.</p>
+              <a class="btn btn--line" href="#zapis" data-book data-service="razbor">Записаться<span class="sr"> на&nbsp;разбор гардероба</span></a>
             </div>
           </li>
 
@@ -631,9 +652,9 @@ body.has-host-badge .menu{padding-bottom:104px}
                 <li class="label lbl">4&nbsp;часа</li>
                 <li class="label lbl lbl--dark">8&nbsp;000&nbsp;₽</li>
               </ul>
-              <p class="svc__text">Накануне стилист проходит магазины Пскова и&nbsp;откладывает вещи вашего размера. В&nbsp;день шопинга вы&nbsp;не&nbsp;ищете&nbsp;— только примеряете&nbsp;и&nbsp;решаете.</p>
-              <p class="svc__result"><b>Итог:</b> покупки в&nbsp;пределах вашего бюджета, сами вещи в&nbsp;8&nbsp;000&nbsp;₽ не&nbsp;входят. Процента с&nbsp;магазинов стилист не&nbsp;берёт, чеки сохраняем&nbsp;для&nbsp;возврата.</p>
-              <a class="btn btn--line" href="#zapis" data-service="shoping">Записаться<span class="sr"> на&nbsp;шопинг со&nbsp;стилистом</span></a>
+              <p class="svc__text">Накануне стилист обходит магазины Пскова и&nbsp;откладывает вещи вашего размера, так&nbsp;что&nbsp;в&nbsp;день шопинга искать ничего не&nbsp;придётся. Вы&nbsp;только примеряете и&nbsp;выбираете.</p>
+              <p class="svc__result">Покупаем в&nbsp;пределах вашего бюджета, а&nbsp;сами вещи в&nbsp;8&nbsp;000&nbsp;₽ не&nbsp;входят. Процент с&nbsp;магазинов стилист не&nbsp;берёт, чеки сохраняем на&nbsp;случай возврата.</p>
+              <a class="btn btn--line" href="#zapis" data-book data-service="shoping">Записаться<span class="sr"> на&nbsp;шопинг со&nbsp;стилистом</span></a>
             </div>
           </li>
 
@@ -650,9 +671,9 @@ body.has-host-badge .menu{padding-bottom:104px}
                 <li class="label lbl">2&nbsp;встречи</li>
                 <li class="label lbl lbl--dark">14&nbsp;000&nbsp;₽</li>
               </ul>
-              <p class="svc__text">Разбор и&nbsp;шопинг с&nbsp;одним стилистом, с&nbsp;перерывом в&nbsp;неделю. Старые и&nbsp;новые вещи сводим так, чтобы&nbsp;они&nbsp;сочетались между&nbsp;собой.</p>
-              <p class="svc__result"><b>Итог:</b> <span class="nw">стайл-бук</span> на&nbsp;25 образов с&nbsp;фотографиями&nbsp;— открыли утром&nbsp;и&nbsp;оделись. На&nbsp;1&nbsp;500&nbsp;₽ дешевле, чем разбор и&nbsp;шопинг&nbsp;по&nbsp;отдельности.</p>
-              <a class="btn btn--line" href="#zapis" data-service="kapsula">Записаться<span class="sr"> на&nbsp;капсулу на&nbsp;сезон</span></a>
+              <p class="svc__text">Сначала проводим разбор, через&nbsp;неделю идём на&nbsp;шопинг, и&nbsp;оба раза с&nbsp;вами работает один стилист. Старые и&nbsp;новые вещи сводим так, чтобы&nbsp;они&nbsp;сочетались между&nbsp;собой.</p>
+              <p class="svc__result">В&nbsp;конце вы&nbsp;получите <span class="nw">стайл-бук</span> на&nbsp;25 образов с&nbsp;фотографиями: утром открыли и&nbsp;оделись. Вместе это&nbsp;на&nbsp;1&nbsp;500&nbsp;₽ дешевле, чем&nbsp;разбор и&nbsp;шопинг по&nbsp;отдельности.</p>
+              <a class="btn btn--line" href="#zapis" data-book data-service="kapsula">Записаться<span class="sr"> на&nbsp;капсулу на&nbsp;сезон</span></a>
             </div>
           </li>
 
@@ -669,9 +690,9 @@ body.has-host-badge .menu{padding-bottom:104px}
                 <li class="label lbl">1,5&nbsp;часа</li>
                 <li class="label lbl lbl--dark">4&nbsp;500&nbsp;₽</li>
               </ul>
-              <p class="svc__text">Свадьба, где&nbsp;вы&nbsp;гостья, выпускной, собеседование, юбилей. Собираем образ от&nbsp;платья до&nbsp;серёг, у&nbsp;вас дома или&nbsp;в&nbsp;студии. Чего нет в&nbsp;шкафу, найдём в&nbsp;магазинах&nbsp;или&nbsp;прокате.</p>
-              <p class="svc__result"><b>Итог:</b> образ целиком и&nbsp;запасной вариант на&nbsp;случай&nbsp;дождя.</p>
-              <a class="btn btn--line" href="#zapis" data-service="sobytie">Записаться<span class="sr"> на&nbsp;образ к&nbsp;событию</span></a>
+              <p class="svc__text">Подготовим вас к&nbsp;свадьбе, где&nbsp;вы&nbsp;гостья, к&nbsp;выпускному, собеседованию или&nbsp;юбилею. Образ целиком, вплоть до&nbsp;серёг, собираем у&nbsp;вас дома или&nbsp;в&nbsp;студии, а&nbsp;чего нет в&nbsp;шкафу, найдём в&nbsp;магазинах или&nbsp;прокате.</p>
+              <p class="svc__result">У&nbsp;вас будет готовый образ и&nbsp;запасной вариант на&nbsp;случай дождя.</p>
+              <a class="btn btn--line" href="#zapis" data-book data-service="sobytie">Записаться<span class="sr"> на&nbsp;образ к&nbsp;событию</span></a>
             </div>
           </li>
 
@@ -688,9 +709,9 @@ body.has-host-badge .menu{padding-bottom:104px}
                 <li class="label lbl">2&nbsp;часа</li>
                 <li class="label lbl lbl--dark">12&nbsp;000&nbsp;₽</li>
               </ul>
-              <p class="svc__text">Приходите в&nbsp;чём удобно. Одеваем из&nbsp;гардероба студии, делаем макияж и&nbsp;ставим свет&nbsp;— вам остаётся смотреть&nbsp;в&nbsp;камеру.</p>
-              <p class="svc__result"><b>Итог:</b> два образа и&nbsp;20 кадров в&nbsp;ретуши через&nbsp;пять&nbsp;дней.</p>
-              <a class="btn btn--line" href="#zapis" data-service="syomka">Записаться<span class="sr"> на&nbsp;fashion-съёмку</span></a>
+              <p class="svc__text">Приходите в&nbsp;том, в&nbsp;чём удобно. Мы&nbsp;оденем вас из&nbsp;гардероба студии, сделаем макияж и&nbsp;поставим свет, а&nbsp;вам останется смотреть в&nbsp;камеру.</p>
+              <p class="svc__result">Успеваем снять два образа, а&nbsp;через&nbsp;пять дней присылаем 20 кадров в&nbsp;ретуши.</p>
+              <a class="btn btn--line" href="#zapis" data-book data-service="syomka">Записаться<span class="sr"> на&nbsp;fashion-съёмку</span></a>
             </div>
           </li>
 
@@ -705,7 +726,7 @@ body.has-host-badge .menu{padding-bottom:104px}
       <div class="pick" id="podbor">
         <div class="pick__main">
           <h3 class="h3">Не&nbsp;знаете, с&nbsp;чего начать?</h3>
-          <p class="pick__lead">Ответьте на&nbsp;пару вопросов&nbsp;— подскажем, какая услуга подойдёт и&nbsp;сколько она стоит.</p>
+          <p class="pick__lead">Ответьте на&nbsp;пару вопросов, и&nbsp;мы&nbsp;подскажем, какая услуга вам подойдёт и&nbsp;сколько она&nbsp;стоит.</p>
           <fieldset class="pick__step" data-step="start">
             <legend class="label">Что хотите решить</legend>
             <div class="pick__opts">
@@ -742,24 +763,24 @@ body.has-host-badge .menu{padding-bottom:104px}
               <ul class="svc__labels" aria-label="Длительность и цена"><li class="label lbl pick__time">3&nbsp;часа</li><li class="label lbl lbl--dark pick__price">7&nbsp;500&nbsp;₽</li></ul>
               <p class="pick__why">Разберёте шкаф со&nbsp;стилистом, соберёте образы из&nbsp;своих вещей и&nbsp;получите шопинг-лист.</p>
               <div class="pick__acts">
-                <a class="btn btn--chalk pick__go" href="#zapis" data-service="razbor">Записаться</a>
+                <a class="btn btn--chalk pick__go" href="#zapis" data-book data-service="razbor">Записаться</a>
                 <button class="link link--chalk" type="button" data-next="start">Подобрать заново</button>
               </div>
             </div>
           </div>
-          <p class="pick__note">Оплата после встречи: картой, переводом или&nbsp;наличными. Предоплата&nbsp;— только за&nbsp;съёмку.</p>
+          <p class="pick__note">Оплатить можно после встречи картой, переводом или&nbsp;наличными. Предоплату берём только за&nbsp;съёмку.</p>
         </div>
         <div class="pick__list">
           <h3 class="label pick__list-title">Все цены</h3>
           <dl class="pick__prices">
             <div data-key="razbor" data-time="3&nbsp;часа" data-why="Разберёте шкаф со&nbsp;стилистом, соберёте образы из&nbsp;своих вещей и&nbsp;получите шопинг-лист."><dt>Разбор гардероба</dt><dd>7&nbsp;500&nbsp;₽</dd></div>
             <div data-key="shoping" data-time="4&nbsp;часа" data-why="Стилист заранее отложит вещи вашего размера, вам останется примерить и&nbsp;решить."><dt>Шопинг со&nbsp;стилистом</dt><dd>8&nbsp;000&nbsp;₽</dd></div>
-            <div data-key="kapsula" data-time="2&nbsp;встречи" data-why="Разбор и&nbsp;шопинг с&nbsp;одним стилистом. На&nbsp;1&nbsp;500&nbsp;₽ дешевле, чем по&nbsp;отдельности."><dt>Капсула на&nbsp;сезон</dt><dd>14&nbsp;000&nbsp;₽</dd></div>
-            <div data-key="sobytie" data-time="1,5&nbsp;часа" data-why="Соберём образ от&nbsp;платья до&nbsp;серёг и&nbsp;запасной вариант на&nbsp;случай дождя."><dt>Образ на&nbsp;событие</dt><dd>4&nbsp;500&nbsp;₽</dd></div>
-            <div data-key="syomka" data-time="2&nbsp;часа" data-why="Одеваем, делаем макияж и&nbsp;ставим свет. Через пять дней&nbsp;— 20 кадров в&nbsp;ретуши."><dt>Fashion-съёмка</dt><dd>12&nbsp;000&nbsp;₽</dd></div>
-            <div data-key="market" data-time="20 вещей" data-why="Двадцать ссылок на&nbsp;Wildberries, Ozon и&nbsp;Lamoda по&nbsp;вашим меркам."><dt>Подбор на&nbsp;маркетплейсах</dt><dd>3&nbsp;000&nbsp;₽</dd></div>
-            <div data-key="spb" data-time="1&nbsp;день" data-why="Туда и&nbsp;обратно на&nbsp;«Ласточке», около десяти часов на&nbsp;магазины. Билеты&nbsp;— отдельно."><dt>День в&nbsp;Петербурге</dt><dd>15&nbsp;000&nbsp;₽</dd></div>
-            <div data-key="gift" data-time="полгода" data-why="На&nbsp;любую услугу или&nbsp;сумму. Пришлём файлом или&nbsp;отдадим в&nbsp;конверте с&nbsp;тканым ярлыком."><dt>Сертификат</dt><dd>от&nbsp;3&nbsp;000&nbsp;₽</dd></div>
+            <div data-key="kapsula" data-time="2&nbsp;встречи" data-why="Разбор и&nbsp;шопинг проведёт один стилист, и&nbsp;вместе это&nbsp;на&nbsp;1&nbsp;500&nbsp;₽ дешевле, чем&nbsp;по&nbsp;отдельности."><dt>Капсула на&nbsp;сезон</dt><dd>14&nbsp;000&nbsp;₽</dd></div>
+            <div data-key="sobytie" data-time="1,5&nbsp;часа" data-why="Соберём образ целиком, вплоть до&nbsp;серёг, и&nbsp;запасной вариант на&nbsp;случай дождя."><dt>Образ на&nbsp;событие</dt><dd>4&nbsp;500&nbsp;₽</dd></div>
+            <div data-key="syomka" data-time="2&nbsp;часа" data-why="Оденем, сделаем макияж и&nbsp;поставим свет, а&nbsp;через&nbsp;пять дней пришлём 20 кадров в&nbsp;ретуши."><dt>Fashion-съёмка</dt><dd>12&nbsp;000&nbsp;₽</dd></div>
+            <div data-key="market" data-time="20 вещей" data-why=«Стилист пришлёт двадцать ссылок на&nbsp;Wildberries, Ozon и&nbsp;Lamoda по&nbsp;вашим меркам.»><dt>Подбор на&nbsp;маркетплейсах</dt><dd>3&nbsp;000&nbsp;₽</dd></div>
+            <div data-key="spb" data-time="1&nbsp;день" data-why="Едем туда и&nbsp;обратно на&nbsp;«Ласточке», на&nbsp;магазины остаётся около&nbsp;десяти часов. Билеты оплачиваются отдельно."><dt>День в&nbsp;Петербурге</dt><dd>15&nbsp;000&nbsp;₽</dd></div>
+            <div data-key="gift" data-time="полгода" data-why="Сертификат выпишем на&nbsp;любую услугу или&nbsp;сумму, а&nbsp;пришлём файлом или&nbsp;отдадим в&nbsp;конверте с&nbsp;тканым ярлыком."><dt>Сертификат</dt><dd>от&nbsp;3&nbsp;000&nbsp;₽</dd></div>
           </dl>
         </div>
       </div>
@@ -770,7 +791,7 @@ body.has-host-badge .menu{padding-bottom:104px}
     <div class="wrap">
       <div class="head">
         <h2 class="h2" id="tags-title">Снимаем ярлыки</h2>
-        <p class="lead">У&nbsp;32&nbsp;% женщин в&nbsp;шкафу больше 20 вещей, которые они&nbsp;не&nbsp;носят (<a href="https://lady.mail.ru/article/595502-skolko-deneg-lezhit-v-shkafu-kak-rossiyanki-na-samom-dele-prodayut-i-pokupayut-na-resejle/" target="_blank" rel="noopener">опрос Леди Mail, август 2026</a>). Расстаться с&nbsp;ними мешают «жалко» и&nbsp;«вдруг пригодится», записаться к&nbsp;стилисту&nbsp;— девять похожих мыслей. Срежьте бирку, и&nbsp;под&nbsp;ней появится&nbsp;ответ.</p>
+        <p class="lead">У&nbsp;32&nbsp;% женщин в&nbsp;шкафу больше 20 вещей, которые они&nbsp;не&nbsp;носят (<a href="https://lady.mail.ru/article/595502-skolko-deneg-lezhit-v-shkafu-kak-rossiyanki-na-samom-dele-prodayut-i-pokupayut-na-resejle/" target="_blank" rel="noopener">опрос Леди Mail, август 2026</a>). Расстаться с&nbsp;ними мешают мысли «жалко» и&nbsp;«вдруг пригодится». Записаться к&nbsp;стилисту мешают похожие сомнения, и&nbsp;девять из&nbsp;них мы&nbsp;собрали здесь. Срежьте бирку, и&nbsp;под&nbsp;ней появится ответ.</p>
       </div>
       <ul class="rack">
         <li class="slot">
@@ -778,63 +799,63 @@ body.has-host-badge .menu{padding-bottom:104px}
             <span class="tag__string" style="--len:40px" aria-hidden="true"></span>
             <span class="tag__card" style="--rot:-3deg"><span class="tag__hole" aria-hidden="true"></span><span class="tag__text">Надену, когда&nbsp;похудею</span><span class="tag__cut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.12 8.12 12 12M20 4 8.12 15.88M14.8 14.8 20 20"/></svg>Срезать</span></span>
           </button>
-          <div class="ans" id="a1" tabindex="-1" hidden><s class="ans__q">Надену, когда&nbsp;похудею</s><p class="ans__t">Носить нужно сейчас. Подберём посадку на&nbsp;сегодняшнюю фигуру, а&nbsp;вещи «на&nbsp;потом» уберём&nbsp;отдельно.</p></div>
+          <div class="ans" id="a1" tabindex="-1" hidden><s class="ans__q">Надену, когда&nbsp;похудею</s><p class="ans__t">Носить красивые вещи можно уже&nbsp;сейчас. Подберём то, что&nbsp;хорошо сидит на&nbsp;сегодняшней фигуре, а&nbsp;вещи «на&nbsp;потом» уберём отдельно.</p></div>
         </li>
         <li class="slot">
           <button class="tag" type="button" aria-expanded="false" aria-controls="a2">
             <span class="tag__string" style="--len:64px" aria-hidden="true"></span>
             <span class="tag__card" style="--rot:2deg"><span class="tag__hole" aria-hidden="true"></span><span class="tag__text">Стилист&nbsp;— это&nbsp;для&nbsp;богатых</span><span class="tag__cut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.12 8.12 12 12M20 4 8.12 15.88M14.8 14.8 20 20"/></svg>Срезать</span></span>
           </button>
-          <div class="ans" id="a2" tabindex="-1" hidden><s class="ans__q">Стилист&nbsp;— это&nbsp;для&nbsp;богатых</s><p class="ans__t">Разбор стоит 7&nbsp;500&nbsp;₽, подбор на&nbsp;маркетплейсах&nbsp;— 3&nbsp;000&nbsp;₽. Одно неудачное пальто обходится&nbsp;дороже.</p></div>
+          <div class="ans" id="a2" tabindex="-1" hidden><s class="ans__q">Стилист&nbsp;— это&nbsp;для&nbsp;богатых</s><p class="ans__t">Разбор стоит 7&nbsp;500&nbsp;₽, а&nbsp;подбор на&nbsp;маркетплейсах&nbsp;— 3&nbsp;000&nbsp;₽. Одно неудачное пальто обойдётся дороже.</p></div>
         </li>
         <li class="slot">
           <button class="tag" type="button" aria-expanded="false" aria-controls="a3">
             <span class="tag__string" style="--len:28px" aria-hidden="true"></span>
             <span class="tag__card" style="--rot:-1deg"><span class="tag__hole" aria-hidden="true"></span><span class="tag__text">Заставят выкинуть любимое</span><span class="tag__cut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.12 8.12 12 12M20 4 8.12 15.88M14.8 14.8 20 20"/></svg>Срезать</span></span>
           </button>
-          <div class="ans" id="a3" tabindex="-1" hidden><s class="ans__q">Заставят выкинуть любимое</s><p class="ans__t">Не&nbsp;заставим. Любимое остаётся, а&nbsp;мы&nbsp;объясняем, с&nbsp;чем&nbsp;его&nbsp;носить.</p></div>
+          <div class="ans" id="a3" tabindex="-1" hidden><s class="ans__q">Заставят выкинуть любимое</s><p class="ans__t">Мы&nbsp;не&nbsp;заставим вас расставаться с&nbsp;любимыми вещами. Они&nbsp;остаются, а&nbsp;стилист подскажет, с&nbsp;чем&nbsp;их&nbsp;носить.</p></div>
         </li>
         <li class="slot">
           <button class="tag" type="button" aria-expanded="false" aria-controls="a4">
             <span class="tag__string" style="--len:52px" aria-hidden="true"></span>
             <span class="tag__card" style="--rot:4deg"><span class="tag__hole" aria-hidden="true"></span><span class="tag__text">С&nbsp;моей фигурой&nbsp;— только чёрное</span><span class="tag__cut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.12 8.12 12 12M20 4 8.12 15.88M14.8 14.8 20 20"/></svg>Срезать</span></span>
           </button>
-          <div class="ans" id="a4" tabindex="-1" hidden><s class="ans__q">С&nbsp;моей фигурой&nbsp;— только чёрное</s><p class="ans__t">Размер не&nbsp;выбирает цвет. Подберём оттенки к&nbsp;лицу и&nbsp;крой, который держит&nbsp;силуэт.</p></div>
+          <div class="ans" id="a4" tabindex="-1" hidden><s class="ans__q">С&nbsp;моей фигурой&nbsp;— только чёрное</s><p class="ans__t">Цвет от&nbsp;размера не&nbsp;зависит. Подберём оттенки, которые вам к&nbsp;лицу, и&nbsp;крой, который держит силуэт.</p></div>
         </li>
         <li class="slot">
           <button class="tag" type="button" aria-expanded="false" aria-controls="a5">
             <span class="tag__string" style="--len:34px" aria-hidden="true"></span>
             <span class="tag__card" style="--rot:2deg"><span class="tag__hole" aria-hidden="true"></span><span class="tag__text">Мне уже&nbsp;поздно</span><span class="tag__cut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.12 8.12 12 12M20 4 8.12 15.88M14.8 14.8 20 20"/></svg>Срезать</span></span>
           </button>
-          <div class="ans" id="a5" tabindex="-1" hidden><s class="ans__q">Мне уже&nbsp;поздно</s><p class="ans__t">Возраст&nbsp;— не&nbsp;дресс-код. С&nbsp;годами меняются ткани и&nbsp;крой, а&nbsp;яркое по-прежнему можно&nbsp;носить.</p></div>
+          <div class="ans" id="a5" tabindex="-1" hidden><s class="ans__q">Мне уже&nbsp;поздно</s><p class="ans__t">Одеваться красиво можно в&nbsp;любом возрасте. С&nbsp;годами меняются ткани и&nbsp;крой, а&nbsp;яркие вещи по-прежнему можно&nbsp;носить.</p></div>
         </li>
         <li class="slot">
           <button class="tag" type="button" aria-expanded="false" aria-controls="a6">
             <span class="tag__string" style="--len:58px" aria-hidden="true"></span>
             <span class="tag__card" style="--rot:-4deg"><span class="tag__hole" aria-hidden="true"></span><span class="tag__text">В&nbsp;Пскове нечего купить</span><span class="tag__cut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.12 8.12 12 12M20 4 8.12 15.88M14.8 14.8 20 20"/></svg>Срезать</span></span>
           </button>
-          <div class="ans" id="a6" tabindex="-1" hidden><s class="ans__q">В&nbsp;Пскове нечего купить</s><p class="ans__t">Есть, если&nbsp;знать, где&nbsp;искать. Не&nbsp;хватит&nbsp;— соберём ссылки на&nbsp;маркетплейсах или&nbsp;съездим&nbsp;в&nbsp;Петербург.</p></div>
+          <div class="ans" id="a6" tabindex="-1" hidden><s class="ans__q">В&nbsp;Пскове нечего купить</s><p class="ans__t">Купить в&nbsp;Пскове есть что, просто нужно знать, где&nbsp;искать. А&nbsp;если&nbsp;чего-то не&nbsp;хватит, соберём ссылки на&nbsp;маркетплейсах или&nbsp;съездим в&nbsp;Петербург.</p></div>
         </li>
         <li class="slot">
           <button class="tag" type="button" aria-expanded="false" aria-controls="a7">
             <span class="tag__string" style="--len:30px" aria-hidden="true"></span>
             <span class="tag__card" style="--rot:3deg"><span class="tag__hole" aria-hidden="true"></span><span class="tag__text">Нарядят не&nbsp;в&nbsp;моём стиле</span><span class="tag__cut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.12 8.12 12 12M20 4 8.12 15.88M14.8 14.8 20 20"/></svg>Срезать</span></span>
           </button>
-          <div class="ans" id="a7" tabindex="-1" hidden><s class="ans__q">Нарядят не&nbsp;в&nbsp;моём стиле</s><p class="ans__t">Сначала спрашиваем про&nbsp;работу, детей и&nbsp;каблуки. Образ, в&nbsp;котором вам неудобно,&nbsp;не&nbsp;предложим.</p></div>
+          <div class="ans" id="a7" tabindex="-1" hidden><s class="ans__q">Нарядят не&nbsp;в&nbsp;моём стиле</s><p class="ans__t">Сначала мы&nbsp;расспрашиваем про&nbsp;работу, детей и&nbsp;то, носите ли&nbsp;вы&nbsp;каблуки. Образ, в&nbsp;котором вам неудобно, стилист не&nbsp;предложит.</p></div>
         </li>
         <li class="slot">
           <button class="tag" type="button" aria-expanded="false" aria-controls="a8">
             <span class="tag__string" style="--len:46px" aria-hidden="true"></span>
             <span class="tag__card" style="--rot:-2deg"><span class="tag__hole" aria-hidden="true"></span><span class="tag__text">Не&nbsp;умею позировать</span><span class="tag__cut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.12 8.12 12 12M20 4 8.12 15.88M14.8 14.8 20 20"/></svg>Срезать</span></span>
           </button>
-          <div class="ans" id="a8" tabindex="-1" hidden><s class="ans__q">Не&nbsp;умею позировать</s><p class="ans__t">И&nbsp;не&nbsp;надо. Фотограф ведёт в&nbsp;кадре: куда встать, куда деть руки,&nbsp;когда&nbsp;выдохнуть.</p></div>
+          <div class="ans" id="a8" tabindex="-1" hidden><s class="ans__q">Не&nbsp;умею позировать</s><p class="ans__t">Уметь позировать не&nbsp;нужно, фотограф подскажет в&nbsp;кадре, куда встать, куда деть руки и&nbsp;когда&nbsp;выдохнуть.</p></div>
         </li>
         <li class="slot">
           <button class="tag" type="button" aria-expanded="false" aria-controls="a9">
             <span class="tag__string" style="--len:38px" aria-hidden="true"></span>
             <span class="tag__card" style="--rot:1deg"><span class="tag__hole" aria-hidden="true"></span><span class="tag__text">Стыдно показывать свой&nbsp;шкаф</span><span class="tag__cut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.12 8.12 12 12M20 4 8.12 15.88M14.8 14.8 20 20"/></svg>Срезать</span></span>
           </button>
-          <div class="ans" id="a9" tabindex="-1" hidden><s class="ans__q">Стыдно показывать свой&nbsp;шкаф</s><p class="ans__t">Прибираться заранее не&nbsp;нужно: разбирать проще, когда&nbsp;всё&nbsp;лежит как&nbsp;есть. Что увидит стилист, останется&nbsp;между&nbsp;вами.</p></div>
+          <div class="ans" id="a9" tabindex="-1" hidden><s class="ans__q">Стыдно показывать свой&nbsp;шкаф</s><p class="ans__t">Прибираться заранее не&nbsp;нужно, разбирать проще, когда&nbsp;всё&nbsp;лежит как&nbsp;есть. А&nbsp;всё, что&nbsp;увидит стилист, останется между&nbsp;вами.</p></div>
         </li>
       </ul>
       <div class="tags__foot">
@@ -842,8 +863,8 @@ body.has-host-badge .menu{padding-bottom:104px}
         <button class="link link--chalk" type="button" id="tagsAll">Показать все&nbsp;ответы</button>
       </div>
       <div class="tags__done" id="tagsDone" tabindex="-1" hidden>
-        <p class="h3">Ярлыков не&nbsp;осталось. Осталось&nbsp;записаться</p>
-        <a class="btn btn--chalk" href="#zapis">Записаться</a>
+        <p class="h3">Все&nbsp;ярлыки срезаны, теперь можно записаться</p>
+        <a class="btn btn--chalk" href="#zapis" data-book>Записаться</a>
       </div>
     </div>
   </section>
@@ -857,14 +878,14 @@ body.has-host-badge .menu{padding-bottom:104px}
         </defs>
         <g clip-path="url(#threadClip)">
           <use class="thread__line" href="#threadPath"/>
-          <text class="label thread__text" dy="-12"><textPath href="#threadPath" startOffset="0">носить · подумать · отпустить · </textPath></text>
+          <text class="label thread__text" dy="-12"><textPath href="#threadPath" startOffset="0">оставить · подумать · отпустить · </textPath></text>
         </g>
       </svg>
     </div>
     <div class="wrap">
       <div class="head">
         <h2 class="h2" id="proc-title">Как&nbsp;проходят три часа разбора</h2>
-        <p class="lead">Стилист приезжает к&nbsp;вам в&nbsp;любой день с&nbsp;10:00 до&nbsp;21:00. Решаете вы: без&nbsp;вашего «да» ни&nbsp;одна вещь из&nbsp;шкафа&nbsp;не&nbsp;уходит.</p>
+        <p class="lead">Стилист приезжает к&nbsp;вам в&nbsp;любой день с&nbsp;10:00 до&nbsp;21:00. По&nbsp;каждой вещи решаете вы, и&nbsp;без&nbsp;вашего «да» из&nbsp;шкафа ничего не&nbsp;уходит.</p>
       </div>
       <div class="tape" aria-hidden="true">
         <span class="label tape__n tape__n--start" style="--m:0">0</span>
@@ -884,36 +905,36 @@ body.has-host-badge .menu{padding-bottom:104px}
         <li class="step" data-a="0">
           <span class="label step__time">0–20&nbsp;мин</span>
           <h3 class="h3">Разговор</h3>
-          <p>Чем вы&nbsp;живёте, куда ходите, что бесит в&nbsp;шкафу и&nbsp;сколько готовы&nbsp;тратить.</p>
+          <p>Стилист расспрашивает, чем&nbsp;вы&nbsp;живёте, куда ходите, что&nbsp;бесит в&nbsp;шкафу и&nbsp;сколько вы&nbsp;готовы тратить.</p>
         </li>
         <li class="step" data-a="20">
           <span class="label step__time">20–60&nbsp;мин</span>
           <h3 class="h3">Всё&nbsp;из&nbsp;шкафа</h3>
-          <p>Вещи&nbsp;— на&nbsp;кровать, в&nbsp;три стопки: носить, подумать, отпустить. Решаете вы, стилист объясняет&nbsp;почему.</p>
+          <p>Разбираем вместе, что&nbsp;точно оставляем, что&nbsp;пока под&nbsp;вопросом, а&nbsp;с&nbsp;чем&nbsp;пора расстаться. Стилист поможет разобраться и&nbsp;объяснит, что&nbsp;и&nbsp;почему вам подходит.</p>
         </li>
         <li class="step" data-a="60">
           <span class="label step__time">60–150&nbsp;мин</span>
           <h3 class="h3">Примерка</h3>
-          <p>Из&nbsp;стопок «носить» и&nbsp;«подумать» собираем комплекты. Удачные снимаем&nbsp;на&nbsp;фото.</p>
+          <p>Из&nbsp;того, что&nbsp;оставили, и&nbsp;того, что&nbsp;пока под&nbsp;вопросом, собираем комплекты. Удачные сразу снимаем на&nbsp;фото.</p>
         </li>
         <li class="step" data-a="150">
           <span class="label step__time">150–180&nbsp;мин</span>
           <h3 class="h3">Шопинг-лист</h3>
-          <p>Чего не&nbsp;хватает до&nbsp;готовых образов: вещь, размер, примерная&nbsp;цена.</p>
+          <p>Записываем, чего не&nbsp;хватает до&nbsp;готовых образов: какую вещь купить, в&nbsp;каком размере и&nbsp;сколько она&nbsp;примерно стоит.</p>
         </li>
         <li class="step" data-a="180">
           <span class="label step__time">Через&nbsp;3&nbsp;дня</span>
           <h3 class="h3">Стайл-бук</h3>
-          <p>Присылаем PDF с&nbsp;образами на&nbsp;фото. Ещё&nbsp;30&nbsp;дней отвечаем&nbsp;в&nbsp;Telegram.</p>
+          <p>Присылаем PDF со&nbsp;всеми образами на&nbsp;фото. Ещё&nbsp;30&nbsp;дней после разбора отвечаем на&nbsp;ваши вопросы в&nbsp;Telegram.</p>
         </li>
       </ol>
       <aside class="prep" aria-labelledby="prep-title">
         <h3 class="label prep__title" id="prep-title">Перед&nbsp;разбором</h3>
         <ul>
-          <li>Наденьте простую футболку и&nbsp;джинсы: переодеваться придётся&nbsp;много</li>
-          <li>Сделайте привычный макияж&nbsp;— оцениваем образ&nbsp;целиком</li>
+          <li>Наденьте простую футболку и&nbsp;джинсы, переодеваться придётся много</li>
+          <li>Сделайте привычный макияж, чтобы&nbsp;мы&nbsp;видели образ целиком</li>
           <li>Ничего не&nbsp;выбрасывайте и&nbsp;не&nbsp;прибирайте&nbsp;заранее</li>
-          <li>Достаньте обувь, сумки и&nbsp;украшения: их&nbsp;тоже&nbsp;разбираем</li>
+          <li>Достаньте обувь, сумки и&nbsp;украшения, их&nbsp;тоже&nbsp;разберём</li>
         </ul>
       </aside>
     </div>
@@ -923,7 +944,7 @@ body.has-host-badge .menu{padding-bottom:104px}
     <div class="wrap">
       <div class="head">
         <h2 class="h2" id="shop-title">Где&nbsp;покупать, если&nbsp;вы&nbsp;в&nbsp;Пскове</h2>
-        <p class="lead">Три маршрута под&nbsp;разный бюджет и&nbsp;время. Какой подойдёт вам, стилист подскажет ещё&nbsp;при&nbsp;записи.</p>
+        <p class="lead">Есть три маршрута под&nbsp;разный бюджет и&nbsp;время. Какой подойдёт вам, стилист подскажет ещё&nbsp;при&nbsp;записи.</p>
       </div>
       <div class="routes">
         <article class="route">
@@ -934,27 +955,27 @@ body.has-host-badge .menu{padding-bottom:104px}
             <li class="label lbl">4&nbsp;часа</li>
             <li class="label lbl">8&nbsp;000&nbsp;₽</li>
           </ul>
-          <a class="link link--chalk" href="#zapis" data-service="shoping">Записаться<span class="sr"> на&nbsp;шопинг по&nbsp;Пскову</span></a>
+          <a class="link link--chalk" href="#zapis" data-book data-service="shoping">Записаться<span class="sr"> на&nbsp;шопинг по&nbsp;Пскову</span></a>
         </article>
         <article class="route">
           <p class="label lbl lbl--dark">Онлайн</p>
           <h3 class="h3">Маркетплейсы</h3>
-          <p>Подходит, если&nbsp;в&nbsp;Пскове нет вашего размера. Двадцать ссылок на&nbsp;Wildberries, Ozon и&nbsp;Lamoda по&nbsp;вашим меркам и&nbsp;подсказка, что проверить в&nbsp;пункте выдачи: плечевой шов, длину рукава и&nbsp;состав&nbsp;на&nbsp;ярлыке.</p>
+          <p>Подходит, если&nbsp;в&nbsp;Пскове нет вашего размера. Стилист пришлёт двадцать ссылок на&nbsp;Wildberries, Ozon и&nbsp;Lamoda по&nbsp;вашим меркам и&nbsp;подскажет, что&nbsp;проверить в&nbsp;пункте выдачи: плечевой шов, длину рукава и&nbsp;состав на&nbsp;ярлыке.</p>
           <ul class="route__labels" aria-label="Объём и цена">
             <li class="label lbl">20 вещей</li>
             <li class="label lbl">3&nbsp;000&nbsp;₽</li>
           </ul>
-          <a class="link link--chalk" href="#zapis" data-service="market">Записаться<span class="sr"> на&nbsp;подбор на&nbsp;маркетплейсах</span></a>
+          <a class="link link--chalk" href="#zapis" data-book data-service="market">Записаться<span class="sr"> на&nbsp;подбор на&nbsp;маркетплейсах</span></a>
         </article>
         <article class="route">
           <p class="label lbl lbl--dark">Петербург</p>
           <h3 class="h3">День на&nbsp;«Ласточке»</h3>
-          <p>Подходит, если&nbsp;нужны марки, которых в&nbsp;Пскове нет. Туда&nbsp;— первой утренней «Ласточкой», обратно&nbsp;— вечерней: три с&nbsp;половиной часа в&nbsp;пути и&nbsp;около&nbsp;десяти часов&nbsp;на&nbsp;магазины. Билеты на&nbsp;«Ласточку» для&nbsp;вас и&nbsp;стилиста&nbsp;—&nbsp;отдельно.</p>
+          <p>Подходит, если&nbsp;нужны марки, которых в&nbsp;Пскове нет. Едем первой утренней «Ласточкой», а&nbsp;возвращаемся вечерней. Дорога занимает три с&nbsp;половиной часа, а&nbsp;на&nbsp;магазины остаётся около&nbsp;десяти. Билеты на&nbsp;«Ласточку» для&nbsp;вас и&nbsp;стилиста оплачиваются отдельно.</p>
           <ul class="route__labels" aria-label="Длительность и цена">
             <li class="label lbl">1&nbsp;день</li>
             <li class="label lbl">15&nbsp;000&nbsp;₽</li>
           </ul>
-          <a class="link link--chalk" href="#zapis" data-service="spb">Записаться<span class="sr"> на&nbsp;день в&nbsp;Петербурге</span></a>
+          <a class="link link--chalk" href="#zapis" data-book data-service="spb">Записаться<span class="sr"> на&nbsp;день в&nbsp;Петербурге</span></a>
         </article>
       </div>
     </div>
@@ -964,13 +985,13 @@ body.has-host-badge .menu{padding-bottom:104px}
     <div class="wrap">
       <div class="head">
         <h2 class="h2" id="team-title">Кто будет рядом</h2>
-        <p class="lead">Своя&nbsp;студия в&nbsp;центре Пскова: фон для&nbsp;съёмки, гримёрка и&nbsp;гардероб. На&nbsp;разбор стилист приезжает к&nbsp;вам домой, а&nbsp;на&nbsp;шопинг встречает&nbsp;в&nbsp;магазине.</p>
+        <p class="lead">У&nbsp;нас своя&nbsp;студия в&nbsp;центре Пскова, там&nbsp;есть фон для&nbsp;съёмки, гримёрка и&nbsp;гардероб. На&nbsp;разбор стилист приезжает к&nbsp;вам домой, а&nbsp;на&nbsp;шопинг встречает&nbsp;в&nbsp;магазине.</p>
       </div>
       <ul class="people">
         <li class="person">
           <img src="img/stilist.jpg" alt="Стилист подбирает серьги к красному пиджаку модели" width="900" height="600" loading="lazy" decoding="async">
           <h3 class="h3">Стилист</h3>
-          <p>Ведёт разборы и&nbsp;шопинг. Сначала спрашивает про&nbsp;вашу жизнь, потом&nbsp;про&nbsp;размер.</p>
+          <p>Ведёт разборы и&nbsp;шопинг. Сначала расспрашивает о&nbsp;вашей жизни и&nbsp;только потом о&nbsp;размере.</p>
         </li>
         <li class="person">
           <img src="img/vizazhist.jpg" alt="Визажист поправляет причёску модели перед кадром" width="900" height="600" loading="lazy" decoding="async">
@@ -980,7 +1001,7 @@ body.has-host-badge .menu{padding-bottom:104px}
         <li class="person">
           <img src="img/fotograf.jpg" alt="Фотограф с камерой в студии" width="900" height="600" loading="lazy" decoding="async">
           <h3 class="h3">Фотограф</h3>
-          <p>Снимает в&nbsp;студии и&nbsp;на&nbsp;улице: портрет для&nbsp;резюме, кадры для&nbsp;соцсетей или&nbsp;просто&nbsp;на&nbsp;память.</p>
+          <p>Снимает в&nbsp;студии и&nbsp;на&nbsp;улице портреты для&nbsp;резюме, кадры для&nbsp;соцсетей и&nbsp;фотографии просто на&nbsp;память.</p>
         </li>
       </ul>
     </div>
@@ -990,8 +1011,8 @@ body.has-host-badge .menu{padding-bottom:104px}
     <div class="wrap gift__in">
       <div class="gift__text">
         <h2 class="h2" id="gift-title">Подарить разбор</h2>
-        <p class="lead">Сертификат на&nbsp;любую услугу или&nbsp;сумму от&nbsp;3&nbsp;000&nbsp;₽. Действует полгода. Пришлём файлом в&nbsp;мессенджер или&nbsp;отдадим в&nbsp;конверте с&nbsp;тканым&nbsp;ярлыком.</p>
-        <a class="btn btn--chalk" href="#zapis" data-service="gift">Оформить сертификат</a>
+        <p class="lead">Сертификат можно оформить на&nbsp;любую услугу или&nbsp;сумму от&nbsp;3&nbsp;000&nbsp;₽, действует он&nbsp;полгода. Пришлём его&nbsp;файлом в&nbsp;мессенджер или&nbsp;отдадим в&nbsp;конверте с&nbsp;тканым ярлыком.</p>
+        <a class="btn btn--chalk" href="#zapis" data-book data-service="gift">Оформить сертификат</a>
       </div>
       <div class="cert" aria-hidden="true">
         <span class="cert__string"></span>
@@ -1017,16 +1038,16 @@ body.has-host-badge .menu{padding-bottom:104px}
           <div><dt class="label">Телефон</dt><dd><a href="tel:+78112000000">+7 (8112) 00-00-00</a></dd></div>
           <div><dt class="label">Telegram</dt><dd><a href="https://t.me/">@iznanka_pskov</a></dd></div>
           <div><dt class="label">Часы</dt><dd>Каждый день, <span class="nw">10:00–21:00</span></dd></div>
-          <div><dt class="label">Где</dt><dd>Разбор&nbsp;— у&nbsp;вас дома, шопинг&nbsp;— в&nbsp;магазинах. Съёмка&nbsp;— в&nbsp;студии в&nbsp;центре Пскова, адрес пришлём с&nbsp;подтверждением&nbsp;записи</dd></div>
+          <div><dt class="label">Где</dt><dd>Разбор проходит у&nbsp;вас дома, шопинг&nbsp;— в&nbsp;магазинах, а&nbsp;съёмка&nbsp;— в&nbsp;студии в&nbsp;центре Пскова. Адрес пришлём вместе с&nbsp;подтверждением записи</dd></div>
         </dl>      </div>
       <div class="terms">
         <h3 class="label terms__title">Условия</h3>
         <ul>
-          <li><b>Оплата</b> после встречи: картой, переводом&nbsp;или&nbsp;наличными</li>
-          <li><b>Предоплата</b> только за&nbsp;съёмку, 3&nbsp;000&nbsp;₽: она&nbsp;бронирует&nbsp;студию</li>
-          <li><b>Перенос</b> бесплатно, если&nbsp;предупредить&nbsp;за&nbsp;сутки</li>
-          <li><b>Выезд</b> по&nbsp;Пскову входит в&nbsp;цену, за&nbsp;город&nbsp;—&nbsp;по&nbsp;договорённости</li>
-          <li><b>Лишний час</b> разбора, если&nbsp;шкаф большой,&nbsp;—&nbsp;2&nbsp;500&nbsp;₽</li>
+          <li><b>Оплата</b> после встречи картой, переводом или&nbsp;наличными</li>
+          <li><b>Предоплата</b> 3&nbsp;000&nbsp;₽ нужна только для&nbsp;съёмки, она&nbsp;бронирует студию</li>
+          <li><b>Перенос</b> бесплатный, если&nbsp;предупредите за&nbsp;сутки</li>
+          <li><b>Выезд</b> по&nbsp;Пскову входит в&nbsp;цену, а&nbsp;поездку за&nbsp;город обсудим отдельно</li>
+          <li><b>Лишний час</b> разбора, если&nbsp;шкаф большой, стоит 2&nbsp;500&nbsp;₽</li>
         </ul>
       </div>
       <form class="form" id="form" novalidate>
@@ -1057,7 +1078,7 @@ body.has-host-badge .menu{padding-bottom:104px}
         <p class="err" id="e-agree" hidden>Без&nbsp;согласия заявку принять нельзя</p>
         <p class="agree__note">Как&nbsp;студия обращается с&nbsp;данными, написано в&nbsp;<a href="policy.html" target="_blank">политике обработки персональных данных</a>.</p>
         <button class="btn" type="submit">Записаться</button>
-        <p class="form__ok" id="formOk" role="status" tabindex="-1" hidden>Заявка у&nbsp;стилиста. Напишем в&nbsp;течение двух часов, а&nbsp;после 21:00&nbsp;— утром.</p>
+        <p class="form__ok" id="formOk" role="status" tabindex="-1" hidden>Заявку получили. Стилист напишет в&nbsp;течение двух часов, а&nbsp;если&nbsp;вы&nbsp;оставили её&nbsp;после 21:00, то&nbsp;утром.</p>
       </form>
     </div>
   </section>
@@ -1081,9 +1102,18 @@ body.has-host-badge .menu{padding-bottom:104px}
   </div>
 </footer>
 
+<dialog class="bookdlg" id="book" aria-labelledby="bookTitle">
+  <div class="bookdlg__bar"><button class="bookdlg__x" type="button" id="bookClose"><span class="sr">Закрыть окно записи</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="bookdlg__in">
+    <h2 class="h2 bookdlg__title" id="bookTitle" tabindex="-1">Записаться</h2>
+    <p class="bookdlg__lead">Стилист напишет в&nbsp;течение двух часов, предложит время и&nbsp;ответит на&nbsp;вопросы. Заявки после 21:00 разбираем&nbsp;утром.</p>
+    <div id="bookSlot"></div>
+  </div>
+</dialog>
+
 <div class="dock" id="dock">
   <p class="dock__t">С&nbsp;10:00 до&nbsp;21:00 ответим за&nbsp;два часа</p>
-  <a class="btn btn--sm" href="#zapis">Записаться</a>
+  <a class="btn btn--sm" href="#zapis" data-book>Записаться</a>
 </div>
 
 <div class="cookie" id="cookie" role="region" aria-label="Уведомление о cookie" hidden>
@@ -1135,6 +1165,7 @@ document.addEventListener('DOMContentLoaded', function () {
   document.addEventListener('click', function (e) {
     var a = e.target.closest('a[href^="#"]');
     if (!a || a.classList.contains('skip') || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
+    if (canBook && a.hasAttribute('data-book')) return;
     var id = a.getAttribute('href').slice(1);
     var el = id ? document.getElementById(id) : null;
     if (!el) return;
@@ -1505,6 +1536,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var on = small.matches && dockPast && !dockForm && menu.hidden;
     dock.classList.toggle('is-on', on);
     document.body.classList.toggle('dock-on', on);
+    padSync();
   }
   if (dock && G) {
     ScrollTrigger.create({ trigger: '.hero__acts', start: 'bottom top', end: 'max', onToggle: function (st) { dockPast = st.isActive; dockSync(); } });
@@ -1514,6 +1546,85 @@ document.addEventListener('DOMContentLoaded', function () {
     menu.addEventListener('click', function () { setTimeout(dockSync, 0); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setTimeout(dockSync, 0); });
     onMQ(small, dockSync);
+  }
+  /* ── фокус с клавиатуры не прячется под плашку записи и уведомление о cookie (WCAG 2.2, 2.4.11).
+        Нижний отступ прокрутки равен высоте того, что висит внизу экрана: ставя фокус, браузер выводит
+        элемент в видимую часть с учётом scroll-padding. Событий фокуса не нужно — во вкладке без фокуса
+        окна они не приходят. Пока уведомление открыто, у подвала запас на его высоту: иначе последние
+        ссылки страницы некуда прокрутить ── */
+  function cookieCover() { return cookieBox.hidden ? 0 : Math.max(0, Math.round(innerHeight - cookieBox.getBoundingClientRect().top)); }
+  function padSync() {
+    var h = Math.max(cookieCover(), dock && dock.classList.contains('is-on') ? dock.offsetHeight : 0);
+    html.style.scrollPaddingBottom = h ? (h + 16) + 'px' : '';
+  }
+  function coverSync(refresh) {
+    var h = cookieCover(), on = h > 0;
+    document.body.style.setProperty('--cover-b', h + 'px');
+    padSync();
+    if (document.body.classList.contains('cover-b') === on) return;
+    document.body.classList.toggle('cover-b', on);
+    if (refresh && G) ScrollTrigger.refresh();
+  }
+  coverSync(false);
+  ['cookieYes', 'cookieNo', 'cookieOpen'].forEach(function (id) {
+    document.getElementById(id).addEventListener('click', function () { setTimeout(function () { coverSync(true); }, 0); });
+  });
+  window.addEventListener('resize', function () { coverSync(false); });
+
+  /* ── запись окном. «Записаться» открывает форму поверх страницы: кто не дочитал, не листает
+        потом обратно. Форма одна — на время окна переезжает в dialog и при закрытии возвращается
+        в раздел записи. Если форма уже на экране, второе окно с ней не нужно: курсор встаёт в поле.
+        Без JS или без поддержки dialog кнопки ведут к форме якорем ── */
+  var bookDlg = document.getElementById('book'), bookSlot = document.getElementById('bookSlot');
+  var canBook = !!(bookDlg && bookDlg.showModal && bookSlot && form);
+  /* пока форма в окне, её место в разделе держит заглушка той же высоты: без неё страница под окном
+     укорачивается, браузер подтягивает прокрутку, и после закрытия читатель оказывается не там */
+  var formHold = document.createElement('div');
+  formHold.className = 'book__hold';
+  formHold.setAttribute('aria-hidden', 'true');
+  function openBook(service) {
+    if (service) {
+      var r = form.querySelector('input[name="service"][value="' + service + '"]');
+      if (r) r.checked = true;
+    }
+    okEl.hidden = true;
+    var fr = form.getBoundingClientRect();
+    /* форму и так видно больше чем на 200 px — второе окно с ней не нужно */
+    if (!bookDlg.open && Math.min(fr.bottom, innerHeight) - Math.max(fr.top, 0) > 200) {
+      form.scrollIntoView({ behavior: reduce.matches ? 'auto' : 'smooth', block: 'nearest' });
+      document.getElementById('f-name').focus({ preventScroll: true });
+      return;
+    }
+    if (!bookDlg.open) {
+      formHold.style.height = form.offsetHeight + 'px';
+      form.parentNode.insertBefore(formHold, form);
+      bookSlot.appendChild(form);
+      bookDlg.showModal();
+    }
+    html.classList.add('book-open');
+    /* прозрачность, а не autoAlpha: при visibility:hidden фокус в окно не встанет */
+    if (G && !reduce.matches) G.fromTo(bookDlg, { opacity: 0, y: small.matches ? 48 : 16 }, { opacity: 1, y: 0, duration: .4, ease: 'power2.out', clearProps: 'opacity,transform' });
+    /* на телефоне фокус на заголовке: курсор в поле сразу открыл бы клавиатуру на пол-экрана */
+    document.getElementById(small.matches ? 'bookTitle' : 'f-name').focus({ preventScroll: true });
+    goal('okno');
+  }
+  if (canBook) {
+    document.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-book]');
+      if (!b || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
+      e.preventDefault();
+      /* Safari и iOS не ставят фокус на ссылку по нажатию: закрываясь, окно вернуло бы его туда,
+         где он стоял раньше, — может быть, на другом конце страницы */
+      if (document.activeElement !== b && b.getClientRects().length) b.focus({ preventScroll: true });
+      openBook(b.dataset.service);
+    });
+    document.getElementById('bookClose').addEventListener('click', function () { bookDlg.close(); });
+    /* нажатие на затемнение вокруг окна закрывает его */
+    bookDlg.addEventListener('click', function (e) { if (e.target === bookDlg) bookDlg.close(); });
+    bookDlg.addEventListener('close', function () {
+      if (formHold.parentNode) formHold.parentNode.replaceChild(form, formHold);
+      html.classList.remove('book-open');
+    });
   }
   if (G) {
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { ScrollTrigger.refresh(); });
