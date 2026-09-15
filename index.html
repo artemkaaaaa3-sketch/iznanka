@@ -141,6 +141,9 @@ p{text-wrap:pretty}
 .care{width:284px;gap:8px;line-height:1.35}
 .care__title{color:var(--lining);letter-spacing:.2em;margin-bottom:4px}
 .care__foot{margin-top:6px;padding-top:9px;border-top:1px solid rgba(30,30,33,.16);color:var(--thread)}
+/* пункты состава: перед строкой короткое тире кобальтом, в цвет заголовка бирки; перенос встаёт под текст */
+.care__row{padding-left:16px}
+.care__row::before{content:"";display:inline-block;width:10px;height:2px;margin:0 6px 0 -16px;vertical-align:middle;background:var(--lining)}
 .anim .hero__title .ln>span{transform:translateY(105%)}
 .anim .hero__lead,.anim .hero__acts,.anim .care{opacity:0}
 @media (min-width:900px){.anim .frame{clip-path:inset(100% 0 0 0)}}
@@ -449,11 +452,14 @@ html.book-open{overflow:hidden;scrollbar-gutter:stable}
   .terms b{display:block;margin-bottom:4px}
   .form{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:20px}
   .form>:not(.field){grid-column:1/-1}
-  .prep{max-width:none;display:grid;grid-template-columns:220px minmax(0,1fr);column-gap:40px;align-items:start}
+  /* список карточки на линии текста шагов: у шага 260 + 32 px, у карточки 28 px поля + 220 + 44 */
+  .prep{max-width:none;display:grid;grid-template-columns:220px minmax(0,1fr);column-gap:44px;align-items:start}
   .prep__title{margin:3px 0 0}
   .js .svc__list{width:54%}
   .js .svc__slot{display:none}
   .js .svc__stage{display:block;position:absolute;top:0;right:0;bottom:0;width:40%}
+  /* абзац над услугами по левому краю плашки с видео: сцена стоит на 60 % ширины, колонка абзаца — последние 40 % */
+  .js .svc .head{grid-template-columns:minmax(0,1fr) 40%}
   .stage{position:sticky;top:120px}
   .stage__box{position:relative;aspect-ratio:4/3;border-radius:var(--r);overflow:hidden;background:var(--wool)}
   .stage__box .svc__media{position:absolute;inset:0;aspect-ratio:auto;border-radius:0;visibility:hidden;opacity:0;transition:opacity .45s ease,visibility 0s linear .45s}
@@ -607,10 +613,10 @@ html.book-open{overflow:hidden;scrollbar-gutter:stable}
         </div>
         <figcaption class="care">
           <span class="label care__title">Состав разбора</span>
-          <span>3&nbsp;часа у&nbsp;вас дома</span>
-          <span>до&nbsp;20 образов из&nbsp;ваших вещей</span>
-          <span><span class="nw">шопинг-лист</span> с&nbsp;ценами</span>
-          <span>30&nbsp;дней ответов в&nbsp;Telegram</span>
+          <span class="care__row">3&nbsp;часа у&nbsp;вас дома</span>
+          <span class="care__row">до&nbsp;20 образов из&nbsp;ваших вещей</span>
+          <span class="care__row"><span class="nw">шопинг-лист</span> с&nbsp;ценами</span>
+          <span class="care__row">30&nbsp;дней ответов в&nbsp;Telegram</span>
           <span class="care__foot">Уход: не&nbsp;выбрасывать без&nbsp;примерки</span>
         </figcaption>
       </figure>
