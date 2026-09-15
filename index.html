@@ -141,9 +141,9 @@ p{text-wrap:pretty}
 .care{width:284px;gap:8px;line-height:1.35}
 .care__title{color:var(--lining);letter-spacing:.2em;margin-bottom:4px}
 .care__foot{margin-top:6px;padding-top:9px;border-top:1px solid rgba(30,30,33,.16);color:var(--thread)}
-/* пункты состава: перед строкой короткое тире кобальтом, в цвет заголовка бирки; перенос встаёт под текст */
-.care__row{padding-left:16px}
-.care__row::before{content:"";display:inline-block;width:10px;height:2px;margin:0 6px 0 -16px;vertical-align:middle;background:var(--lining)}
+/* пункты состава: перед строкой точка кобальтом, в цвет заголовка бирки; перенос встаёт под текст */
+.care__row{padding-left:13px}
+.care__row::before{content:"";display:inline-block;width:5px;height:5px;margin:0 8px 0 -13px;border-radius:50%;vertical-align:middle;background:var(--lining)}
 .anim .hero__title .ln>span{transform:translateY(105%)}
 .anim .hero__lead,.anim .hero__acts,.anim .care{opacity:0}
 @media (min-width:900px){.anim .frame{clip-path:inset(100% 0 0 0)}}
