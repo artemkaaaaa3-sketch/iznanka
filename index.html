@@ -61,7 +61,7 @@
 
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;scroll-padding-top:88px}
-html.menu-open{overflow:hidden}
+html.menu-open{overflow:hidden;scrollbar-gutter:stable}
 body{margin:0;background:var(--flannel);color:var(--wool);font:400 var(--t-text)/var(--lh-text) var(--text);-webkit-font-smoothing:antialiased}
 main section:focus{outline:none}
 h1,h2,h3,p,ul,ol,figure,blockquote,dl,dd,fieldset{margin:0}
@@ -369,12 +369,18 @@ body.has-host-badge .menu{padding-bottom:104px}
   .pick__note{margin-top:auto;padding-top:28px}
 }
 
-/* ── нитка над разбором: строчка пришивается при прокрутке, по ней едут три стопки ── */
-.thread{height:96px;margin-bottom:clamp(36px,5vw,64px);overflow:hidden}
-.thread svg{display:block;width:100%;height:96px}
-.thread__line{fill:none;stroke:var(--thread);stroke-width:1.5;stroke-dasharray:7 5}
-.thread__text{fill:var(--wool);letter-spacing:.24em}
-.proc{padding-top:clamp(28px,4vw,52px)}
+/* ── шов между подкладом и фланелью: разделы бирок и разбора сшиты оверлоком, в стык вшита
+      тканая бирка с фразой, от которой идёт название. Строчка — фон с постоянным шагом ── */
+.proc{position:relative}
+.seam{position:absolute;left:0;right:0;top:0;z-index:2;height:0}
+.seam__stitch{position:absolute;left:0;right:0;top:7px;height:12px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='12'%3E%3Cpath d='M0 9.5 L5 2.5 L10 9.5' fill='none' stroke='%232B3BF0' stroke-width='1.3'/%3E%3Cpath d='M0 10.5 H10' stroke='%232B3BF0' stroke-width='1'/%3E%3C/svg%3E") repeat-x 0 0/10px 12px}
+.seam__label{position:absolute;left:50%;top:0;display:grid;justify-items:center;gap:7px;width:max-content;max-width:min(380px,calc(100% - 32px));margin:0;padding:15px 34px 14px;transform:translate(-50%,-50%);background:repeating-linear-gradient(0deg,rgba(30,30,33,.04) 0 1px,transparent 1px 3px),var(--chalk);color:var(--wool);text-align:center;box-shadow:0 1px 0 rgba(30,30,33,.14),0 14px 26px -16px rgba(30,30,33,.55);transition:transform .35s ease}
+.seam__label::before,.seam__label::after{content:"";position:absolute;top:7px;bottom:7px;border-left:1.5px dashed var(--lining)}
+.seam__label::before{left:12px}
+.seam__label::after{right:12px}
+.seam__brand{padding-left:.34em;font-family:var(--display);font-weight:600;font-size:13px;line-height:1;font-stretch:125%;letter-spacing:.34em;text-transform:uppercase}
+.seam__line{font-size:var(--t-text);line-height:1.35;color:var(--thread)}
+@media (hover:hover){.seam__label:hover{transform:translate(-50%,-50%) rotate(-1.5deg)}}
 
 /* ── нижняя панель записи на телефоне ────────────── */
 .dock{display:none}
@@ -633,8 +639,8 @@ html.book-open{overflow:hidden;scrollbar-gutter:stable}
                 <li class="label lbl">3&nbsp;часа</li>
                 <li class="label lbl lbl--dark">7&nbsp;500&nbsp;₽</li>
               </ul>
-              <p class="svc__text">Стилист приезжает к&nbsp;вам домой. Вместе разбираете шкаф, решаете, что носить дальше, и&nbsp;собираете образы из&nbsp;того, что&nbsp;уже&nbsp;есть.</p>
-              <p class="svc__result">После разбора пришлём <span class="nw">стайл-бук</span> в&nbsp;PDF, где&nbsp;до&nbsp;20 образов собрано из&nbsp;ваших вещей. А&nbsp;в&nbsp;<span class="nw">шопинг-листе</span> запишем, чего не&nbsp;хватает и&nbsp;сколько это&nbsp;стоит.</p>
+              <p class="svc__text">Стилист приезжает к&nbsp;вам домой. Вместе вы&nbsp;разбираете шкаф, решаете, что носить дальше, и&nbsp;собираете образы из&nbsp;того, что&nbsp;уже&nbsp;есть.</p>
+              <p class="svc__result">После разбора пришлём <span class="nw">стайл-бук</span> в&nbsp;PDF, где&nbsp;из&nbsp;ваших вещей собрано до&nbsp;20&nbsp;образов. А&nbsp;в&nbsp;<span class="nw">шопинг-листе</span> запишем, чего не&nbsp;хватает и&nbsp;сколько это&nbsp;стоит.</p>
               <a class="btn btn--line" href="#zapis" data-book data-service="razbor">Записаться<span class="sr"> на&nbsp;разбор гардероба</span></a>
             </div>
           </li>
@@ -774,13 +780,13 @@ html.book-open{overflow:hidden;scrollbar-gutter:stable}
           <h3 class="label pick__list-title">Все цены</h3>
           <dl class="pick__prices">
             <div data-key="razbor" data-time="3&nbsp;часа" data-why="Разберёте шкаф со&nbsp;стилистом, соберёте образы из&nbsp;своих вещей и&nbsp;получите шопинг-лист."><dt>Разбор гардероба</dt><dd>7&nbsp;500&nbsp;₽</dd></div>
-            <div data-key="shoping" data-time="4&nbsp;часа" data-why="Стилист заранее отложит вещи вашего размера, вам останется примерить и&nbsp;решить."><dt>Шопинг со&nbsp;стилистом</dt><dd>8&nbsp;000&nbsp;₽</dd></div>
+            <div data-key="shoping" data-time="4&nbsp;часа" data-why="Стилист заранее отложит вещи вашего размера, вам останется примерить и&nbsp;выбрать."><dt>Шопинг со&nbsp;стилистом</dt><dd>8&nbsp;000&nbsp;₽</dd></div>
             <div data-key="kapsula" data-time="2&nbsp;встречи" data-why="Разбор и&nbsp;шопинг проведёт один стилист, и&nbsp;вместе это&nbsp;на&nbsp;1&nbsp;500&nbsp;₽ дешевле, чем&nbsp;по&nbsp;отдельности."><dt>Капсула на&nbsp;сезон</dt><dd>14&nbsp;000&nbsp;₽</dd></div>
             <div data-key="sobytie" data-time="1,5&nbsp;часа" data-why="Соберём образ целиком, вплоть до&nbsp;серёг, и&nbsp;запасной вариант на&nbsp;случай дождя."><dt>Образ на&nbsp;событие</dt><dd>4&nbsp;500&nbsp;₽</dd></div>
             <div data-key="syomka" data-time="2&nbsp;часа" data-why="Оденем, сделаем макияж и&nbsp;поставим свет, а&nbsp;через&nbsp;пять дней пришлём 20 кадров в&nbsp;ретуши."><dt>Fashion-съёмка</dt><dd>12&nbsp;000&nbsp;₽</dd></div>
-            <div data-key="market" data-time="20 вещей" data-why=«Стилист пришлёт двадцать ссылок на&nbsp;Wildberries, Ozon и&nbsp;Lamoda по&nbsp;вашим меркам.»><dt>Подбор на&nbsp;маркетплейсах</dt><dd>3&nbsp;000&nbsp;₽</dd></div>
+            <div data-key="market" data-time="20&nbsp;вещей" data-why="Стилист пришлёт двадцать ссылок на&nbsp;Wildberries, Ozon и&nbsp;Lamoda по&nbsp;вашим меркам."><dt>Подбор на&nbsp;маркетплейсах</dt><dd>3&nbsp;000&nbsp;₽</dd></div>
             <div data-key="spb" data-time="1&nbsp;день" data-why="Едем туда и&nbsp;обратно на&nbsp;«Ласточке», на&nbsp;магазины остаётся около&nbsp;десяти часов. Билеты оплачиваются отдельно."><dt>День в&nbsp;Петербурге</dt><dd>15&nbsp;000&nbsp;₽</dd></div>
-            <div data-key="gift" data-time="полгода" data-why="Сертификат выпишем на&nbsp;любую услугу или&nbsp;сумму, а&nbsp;пришлём файлом или&nbsp;отдадим в&nbsp;конверте с&nbsp;тканым ярлыком."><dt>Сертификат</dt><dd>от&nbsp;3&nbsp;000&nbsp;₽</dd></div>
+            <div data-key="gift" data-time="полгода" data-why="Сертификат выпишем на&nbsp;любую услугу или&nbsp;сумму. Пришлём файлом или&nbsp;отдадим в&nbsp;конверте с&nbsp;тканым ярлыком."><dt>Сертификат</dt><dd>от&nbsp;3&nbsp;000&nbsp;₽</dd></div>
           </dl>
         </div>
       </div>
@@ -848,14 +854,14 @@ html.book-open{overflow:hidden;scrollbar-gutter:stable}
             <span class="tag__string" style="--len:46px" aria-hidden="true"></span>
             <span class="tag__card" style="--rot:-2deg"><span class="tag__hole" aria-hidden="true"></span><span class="tag__text">Не&nbsp;умею позировать</span><span class="tag__cut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.12 8.12 12 12M20 4 8.12 15.88M14.8 14.8 20 20"/></svg>Срезать</span></span>
           </button>
-          <div class="ans" id="a8" tabindex="-1" hidden><s class="ans__q">Не&nbsp;умею позировать</s><p class="ans__t">Уметь позировать не&nbsp;нужно, фотограф подскажет в&nbsp;кадре, куда встать, куда деть руки и&nbsp;когда&nbsp;выдохнуть.</p></div>
+          <div class="ans" id="a8" tabindex="-1" hidden><s class="ans__q">Не&nbsp;умею позировать</s><p class="ans__t">Уметь позировать не&nbsp;нужно: фотограф подскажет в&nbsp;кадре, куда встать, куда деть руки и&nbsp;когда&nbsp;выдохнуть.</p></div>
         </li>
         <li class="slot">
           <button class="tag" type="button" aria-expanded="false" aria-controls="a9">
             <span class="tag__string" style="--len:38px" aria-hidden="true"></span>
             <span class="tag__card" style="--rot:1deg"><span class="tag__hole" aria-hidden="true"></span><span class="tag__text">Стыдно показывать свой&nbsp;шкаф</span><span class="tag__cut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.12 8.12 12 12M20 4 8.12 15.88M14.8 14.8 20 20"/></svg>Срезать</span></span>
           </button>
-          <div class="ans" id="a9" tabindex="-1" hidden><s class="ans__q">Стыдно показывать свой&nbsp;шкаф</s><p class="ans__t">Прибираться заранее не&nbsp;нужно, разбирать проще, когда&nbsp;всё&nbsp;лежит как&nbsp;есть. А&nbsp;всё, что&nbsp;увидит стилист, останется между&nbsp;вами.</p></div>
+          <div class="ans" id="a9" tabindex="-1" hidden><s class="ans__q">Стыдно показывать свой&nbsp;шкаф</s><p class="ans__t">Прибираться заранее не&nbsp;нужно: разбирать проще, когда&nbsp;вещи&nbsp;лежат как&nbsp;есть. А&nbsp;всё, что&nbsp;увидит стилист, останется между&nbsp;вами.</p></div>
         </li>
       </ul>
       <div class="tags__foot">
@@ -870,17 +876,9 @@ html.book-open{overflow:hidden;scrollbar-gutter:stable}
   </section>
 
   <section class="proc" id="razbor" aria-labelledby="proc-title">
-    <div class="thread" aria-hidden="true">
-      <svg viewBox="0 0 1440 96" preserveAspectRatio="xMinYMid slice" focusable="false">
-        <defs>
-          <path id="threadPath" d="M0 54 Q130 14 260 54 T520 54 T780 54 T1040 54 T1300 54 T1560 54"/>
-          <clipPath id="threadClip"><rect class="thread__reveal" x="0" y="0" width="1440" height="96"/></clipPath>
-        </defs>
-        <g clip-path="url(#threadClip)">
-          <use class="thread__line" href="#threadPath"/>
-          <text class="label thread__text" dy="-12"><textPath href="#threadPath" startOffset="0">оставить · подумать · отпустить · </textPath></text>
-        </g>
-      </svg>
+    <div class="seam">
+      <div class="seam__stitch" aria-hidden="true"></div>
+      <p class="seam__label"><span class="seam__brand">Изнанка</span><span class="seam__line">хорошую вещь проверяют по&nbsp;изнанке</span></p>
     </div>
     <div class="wrap">
       <div class="head">
@@ -920,7 +918,7 @@ html.book-open{overflow:hidden;scrollbar-gutter:stable}
         <li class="step" data-a="150">
           <span class="label step__time">150–180&nbsp;мин</span>
           <h3 class="h3">Шопинг-лист</h3>
-          <p>Записываем, чего не&nbsp;хватает до&nbsp;готовых образов: какую вещь купить, в&nbsp;каком размере и&nbsp;сколько она&nbsp;примерно стоит.</p>
+          <p>Записываем, чего не&nbsp;хватает для&nbsp;готовых образов: какую вещь купить, в&nbsp;каком размере и&nbsp;сколько она&nbsp;примерно стоит.</p>
         </li>
         <li class="step" data-a="180">
           <span class="label step__time">Через&nbsp;3&nbsp;дня</span>
@@ -931,10 +929,10 @@ html.book-open{overflow:hidden;scrollbar-gutter:stable}
       <aside class="prep" aria-labelledby="prep-title">
         <h3 class="label prep__title" id="prep-title">Перед&nbsp;разбором</h3>
         <ul>
-          <li>Наденьте простую футболку и&nbsp;джинсы, переодеваться придётся много</li>
+          <li>Наденьте простую футболку и&nbsp;джинсы: переодеваться придётся много</li>
           <li>Сделайте привычный макияж, чтобы&nbsp;мы&nbsp;видели образ целиком</li>
           <li>Ничего не&nbsp;выбрасывайте и&nbsp;не&nbsp;прибирайте&nbsp;заранее</li>
-          <li>Достаньте обувь, сумки и&nbsp;украшения, их&nbsp;тоже&nbsp;разберём</li>
+          <li>Достаньте обувь, сумки и&nbsp;украшения: их&nbsp;тоже&nbsp;разберём</li>
         </ul>
       </aside>
     </div>
@@ -970,7 +968,7 @@ html.book-open{overflow:hidden;scrollbar-gutter:stable}
         <article class="route">
           <p class="label lbl lbl--dark">Петербург</p>
           <h3 class="h3">День на&nbsp;«Ласточке»</h3>
-          <p>Подходит, если&nbsp;нужны марки, которых в&nbsp;Пскове нет. Едем первой утренней «Ласточкой», а&nbsp;возвращаемся вечерней. Дорога занимает три с&nbsp;половиной часа, а&nbsp;на&nbsp;магазины остаётся около&nbsp;десяти. Билеты на&nbsp;«Ласточку» для&nbsp;вас и&nbsp;стилиста оплачиваются отдельно.</p>
+          <p>Подходит, если&nbsp;нужны марки, которых в&nbsp;Пскове нет. Едем первой утренней «Ласточкой» и&nbsp;возвращаемся вечерней. Дорога занимает три с&nbsp;половиной часа, а&nbsp;на&nbsp;магазины остаётся около&nbsp;десяти. Билеты на&nbsp;«Ласточку» для&nbsp;вас и&nbsp;стилиста оплачиваются отдельно.</p>
           <ul class="route__labels" aria-label="Длительность и цена">
             <li class="label lbl">1&nbsp;день</li>
             <li class="label lbl">15&nbsp;000&nbsp;₽</li>
@@ -1038,7 +1036,7 @@ html.book-open{overflow:hidden;scrollbar-gutter:stable}
           <div><dt class="label">Телефон</dt><dd><a href="tel:+78112000000">+7 (8112) 00-00-00</a></dd></div>
           <div><dt class="label">Telegram</dt><dd><a href="https://t.me/">@iznanka_pskov</a></dd></div>
           <div><dt class="label">Часы</dt><dd>Каждый день, <span class="nw">10:00–21:00</span></dd></div>
-          <div><dt class="label">Где</dt><dd>Разбор проходит у&nbsp;вас дома, шопинг&nbsp;— в&nbsp;магазинах, а&nbsp;съёмка&nbsp;— в&nbsp;студии в&nbsp;центре Пскова. Адрес пришлём вместе с&nbsp;подтверждением записи</dd></div>
+          <div><dt class="label">Где</dt><dd>Разбор проходит у&nbsp;вас дома, шопинг&nbsp;— в&nbsp;магазинах, а&nbsp;съёмка&nbsp;— в&nbsp;студии в&nbsp;центре Пскова. Адрес пришлём вместе с&nbsp;подтверждением записи.</dd></div>
         </dl>      </div>
       <div class="terms">
         <h3 class="label terms__title">Условия</h3>
@@ -1098,7 +1096,7 @@ html.book-open{overflow:hidden;scrollbar-gutter:stable}
       <a href="policy.html">Политика обработки данных</a>
       <button type="button" id="cookieOpen">Настройки cookie</button>
     </div>
-    <p class="foot__legal">ИП Фамилия Имя Отчество · ОГРНИП 000000000000000 · ИНН 000000000000 · г.&nbsp;Псков. Яндекс Метрика и&nbsp;cookie работают, только если&nbsp;вы&nbsp;согласились. Цены на&nbsp;сайте не&nbsp;являются публичной&nbsp;офертой.</p>
+    <p class="foot__legal">ИП Фамилия Имя Отчество · ОГРНИП&nbsp;000000000000000 · ИНН&nbsp;000000000000 · г.&nbsp;Псков. Яндекс Метрика и&nbsp;cookie работают, только если&nbsp;вы&nbsp;согласились. Цены на&nbsp;сайте не&nbsp;являются публичной&nbsp;офертой.</p>
   </div>
 </footer>
 
@@ -1492,40 +1490,14 @@ document.addEventListener('DOMContentLoaded', function () {
     else if (b.dataset.res) pickResult(b.dataset.res);
   });
 
-  /* ── нитка: волна под ширину экрана, текст повторяется на всю длину и едет при прокрутке ── */
-  var thread = document.querySelector('.thread');
-  var tSvg = thread && thread.querySelector('svg'), tPath = document.getElementById('threadPath');
-  var tText = thread && thread.querySelector('textPath'), tClip = thread && thread.querySelector('.thread__reveal');
-  var tUnit = tText ? tText.textContent : '', tPeriod = 0, tMoving = G && !reduce.matches;
-  function threadDraw() {
-    if (!thread) return;
-    var w = Math.max(320, Math.round(thread.getBoundingClientRect().width));
-    var half = w < 768 ? 150 : 260, amp = w < 768 ? 12 : 20, mid = 54;
-    var d = 'M0 ' + mid + ' Q' + (half / 2) + ' ' + (mid - amp * 2) + ' ' + half + ' ' + mid;
-    for (var x = half * 2; x <= w + half * 2; x += half) d += ' T' + x + ' ' + mid;
-    tPath.setAttribute('d', d);
-    tSvg.setAttribute('viewBox', '0 0 ' + w + ' 96');
-    tText.textContent = tUnit;
-    tPeriod = tText.getComputedTextLength() || 240;
-    tText.textContent = new Array(Math.ceil(tPath.getTotalLength() / tPeriod) + 3).join(tUnit);
-    tClip.setAttribute('width', tMoving ? tClip.getAttribute('width') : w);
-  }
-  threadDraw();
-  if (thread && tMoving) {
-    ScrollTrigger.addEventListener('refreshInit', threadDraw);
-    var tState = { p: 0 };
-    G.to(tState, {
-      p: 1, ease: 'none',
-      scrollTrigger: { trigger: thread, start: 'top bottom', end: 'bottom top', scrub: .6 },
-      onUpdate: function () { tText.setAttribute('startOffset', (-tState.p * tPeriod).toFixed(1)); }
+  /* ── шов между разделами: строчка прошивается один раз, когда доезжает до экрана.
+        Без анимации или без GSAP она сразу прошита ── */
+  var seamStitch = document.querySelector('.seam__stitch');
+  if (seamStitch && G && !reduce.matches) {
+    G.fromTo(seamStitch, { clipPath: 'inset(0 100% 0 0)' }, {
+      clipPath: 'inset(0 0% 0 0)', duration: 1.4, ease: 'power2.inOut',
+      scrollTrigger: { trigger: '.seam', start: 'top 88%', once: true }
     });
-    G.fromTo(tClip, { attr: { width: 0 } }, {
-      attr: { width: function () { return Math.max(320, Math.round(thread.getBoundingClientRect().width)); } },
-      ease: 'none', immediateRender: false,
-      scrollTrigger: { trigger: thread, start: 'top 92%', end: 'top 45%', scrub: .5, invalidateOnRefresh: true }
-    });
-  } else if (thread) {
-    window.addEventListener('resize', threadDraw);
   }
 
   /* ── нижняя панель записи на телефоне: после кнопок первого экрана и до формы;
