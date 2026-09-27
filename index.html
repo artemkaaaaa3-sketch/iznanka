@@ -552,6 +552,9 @@ html.book-open{overflow:hidden;scrollbar-gutter:stable}
   .logo:hover .logo__face{transform:none}
   .logo:hover .logo__back{transform:rotateY(180deg)}
 }
+
+/* длинная надпись на 320 px ломалась на строки, прижатые влево */
+.btn, .btn-main, a.btn, button.btn{text-align:center;line-height:1.25}
 </style>
 </head>
 <body>
@@ -1609,6 +1612,27 @@ document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener('load', function () { ScrollTrigger.refresh(); });
   }
 });
+</script>
+
+<script>
+/* после «Записаться» страница доезжала до формы, а фокус оставался на body:
+   с клавиатуры человек продолжал табать по странице, а не заполнять поля */
+(function(){
+  var form = document.querySelector('form');
+  if (!form) return;
+  document.addEventListener('click', function(e){
+    var a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    var id = a.getAttribute('href').slice(1);
+    if (!id) return;
+    var target = document.getElementById(id);
+    if (!target || !target.contains(form) && target !== form && !form.contains(target)) return;
+    setTimeout(function(){
+      var field = form.querySelector('input:not([type=hidden]):not([disabled]), textarea, select');
+      if (field) field.focus({ preventScroll: true });
+    }, 420);
+  });
+})();
 </script>
 </body>
 </html>
